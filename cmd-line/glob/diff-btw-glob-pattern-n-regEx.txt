@@ -1,0 +1,10 @@
+
+
+globbing: "*" means "zero or more of any characters"
+regexes:  "*"  means "zero or more of the preceding character"
+
+resources:
+  - 7.3  Regular-Expression versus Glob Patterns
+    http://www.jazimmer.com/tclbook/select/Html/7.3.html
+
+

@@ -1,0 +1,86 @@
+
+
+
+ref: http://wiki.bash-hackers.org/syntax/pattern#bracket_expressions
+
+
+There are two characters that wildcards cannot match: a leading
+period, and the directory slash (/).
+
+
+The usual way to match those files is to type the dot literally. For example:
+
+    .[a-z]*
+
+matches anything whose name starts with a dot and a lowercase letter.
+
+[!!!] Watch out for plain ".*", it matches the directory entries
+"." and "..".
+
+And For "/":
+
+    /etc/*conf
+
+to match all filenames ending in conf in the /etc directory.
+
+====================================================================
+
+    Wildcard Meaning
+    --------------------------------------------
+    *        Zero or more consecutive characters.
+
+    ?        A single character.
+
+    \\       Matches a backslash
+
+    X        Matches the character X that has no special
+             meaning
+
+    \X       Matches a characters X, where the character's
+             special meaning is escaped
+
+    [...]    Bracket expressiongs
+
+
+    Bracket expressions
+    -----------------------------------------------
+    [set]    Any single character in the given set:
+                - sequence of characters:
+                    [aeiouAEIOU] for all vowels
+                - range with a dash:
+                    [A-Z] for all capital letters.
+
+    [^set]   Any single character not in the given set:
+                [^A-Z], any single character that
+                        is not a capital letter.
+
+    [!set]   ! is equivalent to ^.
+
+    When using character sets, if you want to include a literal dash
+    in the set, put it first or last.
+
+        [-abcd]
+        [abcd-]
+
+    To include a literal closing square bracket in the set, put it first:
+
+        a[][bc]z.txt
+
+    The above match:
+
+        a[z.txt, a]z.txt, abz.txt, and acz.txt
+
+    To include a ^ symbol literally, don’t put it first.
+
+        [a^b]z.txt
+
+    To include a ! symbol literally
+
+        don't know
+
+
+    Brace expansion
+    ------------------------------------------------------
+
+    $ echo sand{X,YY,ZZZ}wich
+    sandXwich sandYYwich sandZZZwich
