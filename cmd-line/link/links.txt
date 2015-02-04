@@ -1,0 +1,71 @@
+
+
+
+Hard links:
+
+    $ ln file link
+
+Soft links:
+
+    $ ln -s item link
+
+    where "item" is either a file or directory
+
+
+
+Hard Links:
+==========
+
+limitations:
+ 1. Works only in own filesystem (cannot reference a file that
+    is not on the same disk partition).
+ 2. Cannot reference a directory, only files
+
+A directory listing containing a hard link shows no special indication
+of the link.
+
+When a hard link is deleted, the link is removed, but the contents
+of the file itself continue to exist (that is, its space
+is not deallocated) until all links to the file are deleted.
+
+Modern practice prefers symbolic links, which over come the 2 limitation
+metion above
+
+inode
+-----
+
+    *inode* are id that point to content of the file
+
+    to see inode for a file use:
+
+        $ls -i
+
+    File name with same inode means they point to same content
+
+
+
+
+Symbolic links
+==============
+
+    Symbolic links overcome the two disadvantages of hard links:
+        1. Hard links cannot span physical devices
+        2. Hard links cannot reference directories, only files.
+    Symbolic links are a special type of file that contains
+    a text pointer to the target file or directory.
+
+    If you write something to the symbolic link, the referenced file
+    is also written to.
+
+    When you delete a symbolic link, only the link is deleted, not
+    the file itself.
+
+    If the file is deleted, the link will continue to exist but will
+    point to nothing.
+
+    In many implementations, the ls command will display broken links
+    in a distinguishing color, such as red, to reveal their presence.
+
+
+
+
