@@ -1,0 +1,74 @@
+
+
+On starting a login shell (login in via ssh session) Ubuntu look for
+login configuration file. Login configuration files are:
+
+    .bash_profile
+    .bash_login
+    .profile
+
+Ubuntu will search for one of these file in that order and
+only reads and executes the first one it finds.
+
+By default, .bash_profile and .bash_login are not present, so
+on a clean installation of Ubuntu .profile is read.
+
+On starting a non-login shell (when you open a terminal appcliation
+such xterm) .bashrc is read. Your bash-related configuration
+such as aliases, functions, your bash terminal appearances etc.
+is specified in this files.
+
+Since login shell does not read .bashrc you need the following script
+in your login configuration file to read .bashrc in order to
+configure your bash shell:
+
+    # if running bash
+    if [ -n "$BASH_VERSION" ]; then
+        # include .bashrc if it exists
+        if [ -f "$HOME/.bashrc" ]; then
+            . "$HOME/.bashrc"
+        fi
+    fi
+
+Since the above script is located in .profile, you will use the following
+
+    [[ -s ${HOME}/.profile ]] && source ${HOME}/.profile
+
+to read .profile if you had added .bash_profile file to your freshly
+installed Ubuntu.
+
+Sourcing .profile means that every time you start a login shell
+.bash_profile is executed, then .profile, and finally .bashrc.
+
+Starting a non-login shell will just execute .bashrc as before.
+
+
+Mac OS X
+--------
+
+Unlike Unix/Linus word, OSx terminal alpplications (Termial,
+iTerm2, etc.) start as login shell. While a fresh Ubuntu come with
+.profile, OSx comes with .bash_profile. So, instead of reading
+.profile to source .bashrc, OSx reading .bash_parofile to .source
+.bashrc.
+
+That is the reason you see the following in OSx's .bash_profile:
+
+    [[ -s ~/.bashrc ]] && source ~/.bashrc
+
+So to recap: in OSx, whether you login via a GUI and open a terminal
+application, ssh in, or login at a console, you'll be starting
+a login shell which will execute .bash_profile and then source
+.bashrc.
+
+
+ref:
+http://dghubble.com/blog/posts/.bashprofile-.profile-and-.bashrc-conventions/
+
+
+
+
+
+
+
+
