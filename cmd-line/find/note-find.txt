@@ -7,7 +7,7 @@
 Useful options:
 
 -name {pattern}		named
--path {pattern}		pathname	
+-path {pattern}		pathname
 -lname {pattern}	symbolic
 
 
@@ -18,7 +18,7 @@ Useful options:
 
 -type [ t | f | d | l | b | c| p | s ]
 
-	t	all (?) 
+	t	all (?)
 	f	plain file
 	d	directories
 	l	symbolic links
@@ -29,11 +29,11 @@ Useful options:
 
 
 
-List all the file in current directory 
+List all the file in current directory
 
 	$ find .
 
-List all the directory in .git/ directory 
+List all the directory in .git/ directory
 
 	$ find .git -type d
 
@@ -66,11 +66,11 @@ G Gigabytes (units of 1,073,741,824 bytes)
 
 
 	look for all the regular files that match the wildcard pattern *.JPG and are larger than 1 megabyte
-	
+
 	$ find ~ -type f -name "*.JPG" -size +1M
 		> notice we enclode *.JPG in quotes to prevent pathname expansion by the shell
 
-	
+
 	$ find ~ -type f -name "*.JPG" -size -1M
 		> less than 1M
 
@@ -96,17 +96,17 @@ find . -printf "%T@ %Tc %p\n" | sort -nr
 		#!/bin/bash
 		find $1 -name "$2" -printf "%T@ %Tc %p\n" | sort -nr
 		# usage example: sh fst.sh path/to/find/whatever/you/want "*.t"
-	
+
 
 Note on using -exec
 ~~~~~~~~~~~~~~~~~~~
-	
-A -exec command must be terminated with a ; (so you usually need to type \; or ';' to avoid 
-interpretion by the shell) or a +. 
 
-The difference is that with ;, the command is called once 
+A -exec command must be terminated with a ; (so you usually need to type \; or ';' to avoid
+interpretion by the shell) or a +.
+
+The difference is that with ;, the command is called once
 per file, with +, it is called just as few times as possible
-(usually once, but there is a maximum length for a command 
+(usually once, but there is a maximum length for a command
 line, so it might be split up) with all filenames. See this example:
 
 	$ cat /tmp/echoargs
@@ -118,5 +118,12 @@ line, so it might be split up) with all filenames. See this example:
 	/tmp/foo/two - -
 	$ find /tmp/foo -exec /tmp/echoargs {} +
 	/tmp/foo - /tmp/foo/one - /tmp/foo/two
-	
+
 	from: http://stackoverflow.com/questions/2961673/find-missing-argument-to-exec
+
+
+// search a filename contain "orig" and remove it:
+
+find . -type f -name "*orig*" -exec ls -l {} \;
+find . -type f -name "*orig*" -exec rm {} \;
+
