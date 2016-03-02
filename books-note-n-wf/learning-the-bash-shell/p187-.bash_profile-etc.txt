@@ -1,0 +1,36 @@
+
+Order of configuration files Ubuntu look for on login shell:
+
+    .bash_profile
+    .bash_login  (derived from csh's .login)
+    .profile     (derived from Bourne shell and Korn shell's .profile)
+
+On a clean installation only .profile exist.
+
+You can put your bash specific commands in .bash_profile, and at the end
+of .bash_profile you source .profile.
+
+With this set up when you switch to Borune shell, only .profile
+is read while .bash_profile is skipped. And when you switch back to bash shell,
+bash specific command will be executed in addition to commands in .profile
+which are executable for both Bourne and bash.
+
+Similar approach won't work for csh because of different in syntax between
+csh and bash.
+
+Since login shell does not read .bashrc, you can source .bashrc in
+.profile. So:
+
+On log in, .bash_profile will load .profile which in turn will load
+.bashrc.
+
+
+
+
+
+
+
+
+
+
+

@@ -67,7 +67,8 @@ http://dghubble.com/blog/posts/.bashprofile-.profile-and-.bashrc-conventions/
 
 
 
-
+also ro read:
+http://unix.stackexchange.com/questions/119627/why-are-interactive-shells-on-osx-login-shells-by-default
 
 
 

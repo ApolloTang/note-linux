@@ -1,0 +1,57 @@
+
+Where can you defined aliases?
+
+    on the command line,
+    in .bash_profile
+    in .bashrc,
+
+Alias has the form using this form:
+
+  alias name=command
+
+[!] Notice that there are no spaces on either side of the equal sign (=).
+
+Eg:
+
+    alias cdvoy='cd sipp/demo/animation/voyager'
+
+    [!] note the quotes around command; necessary if the string
+        being aliased consists of more than one word.
+
+
+
+File expansion if alias
+------------------------
+wildcards and other special characters can be used in the aliased
+command i.e., on the right side of the equal sign.
+
+wildcards and other special characters cannot be used in the
+names of aliases, i.e., on the left side of the equal sign.
+
+Eg:
+
+    alias printall='pr * | lpr'
+
+
+Recursive Nature of alias
+-------------------------
+Aliases are recursive, which means that it is possible to alias
+an alias. However, while being recursive infinite loop will not
+occurs because only the first word of the replacement text is
+checked for further aliasing; if that word is identical to the
+alias being expanded, it is not expanded a second time.
+
+Therefore
+
+  alias ls='ls -l'
+
+will work as expected (typing ls produces a long list with permissions
+sizes, owners, etc.), while in more meaningless situations such as:
+
+  alias listfile=ls
+  alias ls=listfile
+
+the alias listfile is ignored.
+
+
+

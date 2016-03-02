@@ -1,0 +1,46 @@
+[prefix] === [ctr-b]
+
+
+Session
+=======
+
+tmux ls                             // list runing session
+tmux attach -t <session-name>       // attach a session
+
+tmux new -s <session-name>          // start a new session
+tmux new -s <session-name> -d       // new session in background
+
+[prefix]d                           // detash (exit not kill) a session
+tmux kill-session -t <sesion-name>  // kill a session
+
+
+Window
+======
+
+Session can have child sessions called window
+
+[prefix]c      // creat a window
+[prefix],      // rename current window
+$exit          // close current window
+[prefix]&      // close current window with confirmation
+
+
+If you never give a name to a window, its name will changes based
+on the application that is currently running.
+
+[prefix]n           // switch to next window
+[prefix]p           // switch to previous window
+[prefix]<window id> // switch to window by id
+
+[prefix]f           // find a window
+[prefix]m           // display a menu of window
+
+
+Split window into panes
+=======================
+
+
+
+
+
+
