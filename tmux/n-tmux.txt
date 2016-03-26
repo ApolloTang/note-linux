@@ -4,20 +4,22 @@
 Session
 =======
 
-tmux ls                             // list runing session
-tmux attach -t <session-name>       // attach a session
+tmux ls                             // List runing session
+tmux attach -t <session-name>       // Attach a session
 
-tmux new -s <session-name>          // start a new session
-tmux new -s <session-name> -d       // new session in background
+tmux new -s <session-name>          // Start a new session
+tmux new -s <session-name> -d       // New session in background
 
-[prefix]d                           // detash (exit not kill) a session
-tmux kill-session -t <sesion-name>  // kill a session
+[prefix]d                           // Detash (exit not kill) a session
+tmux kill-session -t <sesion-name>  // Kill a session
 
 
 Window
 ======
 
 Session can have child sessions called window
+
+tmux new -s <session-name> -n <window-name>   // New session, with name for session and window
 
 [prefix]c      // creat a window
 [prefix],      // rename current window
@@ -39,6 +41,15 @@ on the application that is currently running.
 Split window into panes
 =======================
 
+Is the new pane, session or window ?
+
+[prefix]%  // verticlally split the screen, focus on the new pane and
+           // start a new session.
+
+[prefix]"  // like [prefix]% but horizontally.
+
+[prefix]o            // cycle through panes.
+[prefix]<arrow-key>  // moments through panes.
 
 
 
