@@ -1,0 +1,63 @@
+Setting Option:
+===============
+
+Setting the options is how you configure the behaviour of
+your shell.
+
+
+For example, if you want to use vi like editing mode
+to type or edit your commands you enter:
+
+    set -o vi
+
+to unset vi mode you use "+" in lieu of "-"
+
+The use of plus "+" and minus "-" signs is counterintuitive:
+
+    the '-' turns the named option on,
+    while the '+' turns it off.
+
+The reason for this incongruity is that the dash '-' is the conventional
+UNIX way of specifying options to a command, while the use of
+'+' is an afterthought.
+
+
+Available options
+-----------------
+
+    The set option command takes the following format:
+
+        set -o <option-name>
+
+    The list the available <option-name>, do manpage for sh:
+
+        man sh
+
+    and search for 'option-name'.
+
+
+
+To list the status of options:
+------------------------------
+
+    set -o
+
+bash will print a list of all options along with their settings.
+
+
+Legacy
+------
+The lagacy Bourne shell, does not use 'set -o' to configure shell
+behaviour, it uses a one letter abbreviations for this purpose,
+for example, to turn off filename expansion, the lagacy Bourne shell uses:
+
+    set -f
+
+which is equivilant to the following in bash shell
+
+    set -o noglob
+
+
+options have a on-letter abbreviations that is synomyn to
+to 'set -o <option>':
+
