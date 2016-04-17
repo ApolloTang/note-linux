@@ -40,24 +40,59 @@ Available options
 To list the status of options:
 ------------------------------
 
-    set -o
+        set -o
 
-bash will print a list of all options along with their settings.
+    bash will print a list of all options along with their settings.
 
 
 Legacy
 ------
-The lagacy Bourne shell, does not use 'set -o' to configure shell
-behaviour, it uses a one letter abbreviations for this purpose,
-for example, to turn off filename expansion, the lagacy Bourne shell uses:
+    The lagacy Bourne shell, does not use 'set -o' to configure shell
+    behaviour, it uses a one letter abbreviations for this purpose,
+    for example, to turn off pathname expansion, the lagacy Bourne shell uses:
 
-    set -f
+        set -f
 
-which is equivilant to the following in bash shell
+    which is equivilant to the following in bash shell
 
-    set -o noglob
+        set -o noglob
 
 
-options have a on-letter abbreviations that is synomyn to
-to 'set -o <option>':
+    options have a on-letter abbreviations that is synomyn to
+    to 'set -o <option>':
+
+
+shopt
+=====
+
+'shopt' is a replacement for 'set -o' in bash 2.0.
+It uses '-s' and '-u' instead of '+' or '-' to set or unset a shell
+s behaviour properties. For example:
+
+    set -o -s vi
+    set -o -u vi
+
+is identical to
+
+    set -o vi
+    set +o vi
+
+Note that if you omit -o flag you will have access to additional
+property not availalble to 'set -o'.  Search for 'shopt' in
+'man sh' to see the complete list with describtion of what they do.
+
+To print a list of value for all available options, simply type:
+
+    'shopt -o' or 'shopt -p -o'
+
+The -p flag will give you a reusuable command snippet that can
+be use to produce the current setting.
+
+
+
+
+
+
+
+
 
