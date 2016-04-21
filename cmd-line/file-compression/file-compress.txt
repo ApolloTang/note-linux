@@ -1,0 +1,82 @@
+::::::
+Useful
+::::::
+
+    Bzip
+    ~~~~~~
+    tar -cjf myfile.tar.bz2 {dirname}   Pack.
+    tar -tjf myfile.tar.bz2             List contents.
+    tar -xjf myfile.tar.bz2             Unpack.
+
+    GNU zip  ( .gz, tgz )
+    ~~~~~~~~
+    tar -czf myfile.tar.gz {dirname}    Pack.
+    tar -tzf myfile.tar.gz              List contents.
+    tar -xzf myfile.tar.gz              Unpack.
+
+    Window
+    ~~~~~~~
+    zip myfile.zip file1 file2 ...  Pack.
+    zip -r myfile.zip {dirname}     Pack recursively.
+    unzip -l myfile.zip             List contents.
+    unzip myfile.zip                Unpack.
+
+
+::::::::::::::
+Archive
+::::::::::::::
+
+    tar -tf filename.tar                    // list content of a tar file
+    tar -cvf filename.tar directory-name    // create a tar file from directory-name
+    tar -cvf ../filename.tar .              // create a tar file from content of all current,
+                                            //   and place it one level above the current directory
+
+    [!important!]
+        always check the content of tar file with
+
+            tar -tf filename.tar
+
+        before extract. If the content item start with "./" , you might want to
+        create a directory and extract inside.
+
+
+::::::::::::::
+Compress
+::::::::::::::
+
+
+    [!!! WARNING !!!]:
+    these commands (except zip) will delete original file
+    for bzip2, use -k to keep original file
+
+    BZip
+    ~~~~
+    .bz2    bzip2 -v myfile
+            bunzip2 -v myfile.bz2           same as bzip2 -dv
+            bzcat myfile.bz2 | head -2
+
+
+    GNU zip
+    ~~~~~~~
+    .gz     gzip
+            gunzip
+            zcat
+
+
+    Unix Classic
+    ~~~~~~~~~~~~
+    .Z      compress
+            uncompress
+            zcat
+
+    Window
+    ~~~~~~
+    .zip    zip
+            unzip
+                    Note: unlike most other Linux compression
+                    commands, zip does not delete the original file
+
+
+    List of archive formats: http://en.wikipedia.org/wiki/List_of_archive_formats
+
+
