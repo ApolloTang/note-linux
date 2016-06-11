@@ -1,5 +1,8 @@
 [prefix] === [ctr-b]
 
+[prefix]:                      // enter command mode
+:source-file ~/.tmux.conf      // source configuration file
+
 
 Session
 =======
@@ -21,7 +24,6 @@ tmux kill-session -t <sesion-name>  // Kill a session
 [prefix]$                           // rename session
 
 
-
 Window
 ======
 
@@ -34,6 +36,8 @@ tmux new -s <session-name> -n <window-name>   // New session, with name for sess
 $exit          // close current window
 [prefix]&      // close current window with confirmation
 
+
+[prefix].      // move window
 
 If you never give a name to a window, its name will changes based
 on the application that is currently running.
@@ -62,5 +66,41 @@ Is the new pane, session or window ?
 
 
 
+
+==========================
+
+
 [prefix]?  // list all binding
 
+
+
+Handling Text
+=============
+[prefix][                      // Entering copy mode
+press <Enter>                  // Exit copy mode
+
+    copy into buffer
+    ----------------
+    copy mode: <Space> to start copying text into buffer
+    copy mode: <Enter> Stop copying text into buffer
+
+
+    paste content of buffer
+    -----------------------
+    [prefix]]
+
+
+
+plugin
+======
+
+    tmux-yank
+    ---------
+    https://github.com/tmux-plugins/tmux-yank
+
+    [prefix]y - copies text from the command line to clipboard.
+    [prefix]Y - copy pane current working directory to clipboard.
+
+    copy mode bindings:
+    y            // copy selection to system clipboard
+    Y            // (shift-y) - "put" selection into command line - equivalent to copying a selection, and pasting it to the command line
