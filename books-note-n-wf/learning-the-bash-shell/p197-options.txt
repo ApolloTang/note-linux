@@ -4,6 +4,9 @@ Setting Option:
 Setting the options is how you configure the behaviour of
 your shell.
 
+Some configurations are simply expressed in a value as on or
+off. Configurations as such are the configure using the commands:
+'set' or 'shopt'.
 
 For example, if you want to use vi like editing mode
 to type or edit your commands you enter:

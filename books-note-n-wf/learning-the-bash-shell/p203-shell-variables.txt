@@ -1,0 +1,6 @@
+Shell Variables
+===============
+
+Some configurationa of your shell behavior takes a specific value
+and cannot be expressed as an on or off. Configuration of this
+type are specified in shell variables.
