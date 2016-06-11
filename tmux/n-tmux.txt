@@ -3,15 +3,23 @@
 
 Session
 =======
+Sessions are groups of windows. Each session is kind of like spaces in OSX.
+A typical workflow is to isolate projects to a single session, and name the session
+by the name of project, and then configure the default folder to project folder,
+and environment to that project, etc.
+
+tmux new -s <session-name>          // Start a new session, and go into it.
+tmux new -s <session-name> -d       // Start a detash new session (New session in background)
 
 tmux ls                             // List runing session
-tmux attach -t <session-name>       // Attach a session
-
-tmux new -s <session-name>          // Start a new session
-tmux new -s <session-name> -d       // New session in background
-
 [prefix]d                           // Detash (exit not kill) a session
+tmux attach -t <session-name>       // Attach tmux and set target session to <session-name>
+
 tmux kill-session -t <sesion-name>  // Kill a session
+
+[prefix]s                           // switch between session
+[prefix]$                           // rename session
+
 
 
 Window
@@ -54,4 +62,5 @@ Is the new pane, session or window ?
 
 
 
+[prefix]?  // list all binding
 
