@@ -1,0 +1,59 @@
+
+Variable name:
+  • Case sensitive
+  • Consist of a combination of letter and underscore
+  • Assignment operator is '='
+  • Note that no space are permitted on either side of '='
+
+
+
+
+
+Special variable inside script:
+
+    $0           is the file name of current script
+    $1, ..., $n  are the nth argument passed into the script
+    $@           holds a space delimited string of all arguments passed to
+                 the script
+
+
+Encapsulating the variable name with ${} is used to avoid ambiguity.
+
+    $ a=hello123
+
+    $ echo "XXX ${a} XXX"
+    XXX hello123 XXX
+
+
+Extra white space will be removed from a string:
+
+    $ e='a b     c     '
+           ^^^^  ^^^^-----------extra space will be removed
+
+    $ echo $e 'xxx'
+    a b c xxx
+       ^ ^------- only one space left
+
+To preserve space, surrround the variable with double quote:
+
+    $ echo "$e" 'xxx'
+    a b    c     xxx
+
+
+
+Substitution:
+To assign the result of a command to variable, use back-ticks or $():
+
+    $ a=`echo hello`
+    $ echo $a
+    hello
+
+
+    $ b=$(echo bye)
+    $ echo $b
+    bye
+
+    In otherword, back-ticks or $() capture the result of cammand execution.
+
+
+

@@ -1,0 +1,12 @@
+
+get length of string
+
+    $ string='this is a string'
+    $ length=${#string}
+    $ echo $length
+    16
+
+
+
+
+

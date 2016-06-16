@@ -1,0 +1,38 @@
+Defining array:
+
+a=(1 2 a b c d)
+
+To access element of array by index (zero based).
+
+    $ echo ${a[0]}
+    1
+
+    $ echo ${a[1]}
+    2
+
+    Note that curly brackets are required
+    to access elements of array
+
+Accessing all element of array:
+
+    $ echo ${a[@]}
+    1 2 a b c d
+
+Get the length of array:
+
+    $ echo ${#a[@]}
+    6
+
+Get last elements:
+
+    $ echo ${a[${#a[@]}-1]}
+    d
+
+
+
+
+
+
+
+
+
