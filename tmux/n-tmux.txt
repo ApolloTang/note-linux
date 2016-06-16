@@ -79,7 +79,8 @@ Is the new pane, session or window ?
 Handling Text
 =============
 [prefix][                      // Entering copy mode
-press <Enter>  (alias: v)      // Exit copy mode
+press <Enter>                  // Exit copy mode
+
 [prefix]]                      // Paste buffer content
 
 tmux show-buffer               // show content of current buffer
@@ -90,13 +91,9 @@ tmux show-buffer               // show content of current buffer
 
     copy into buffer
     ----------------
-    copy mode: <Space> to start copying text into buffer
-    copy mode: <Enter> Stop copying text into buffer
-
-
-    paste content of buffer
-    -----------------------
-    [prefix]]
+    copy mode: <Space> // to start copying text into buffer,  activate/inactivate highlight
+                       // (alias to: v)
+    search mode: c-u   // clear search field
 
 
 
@@ -108,8 +105,11 @@ plugin
     https://github.com/tmux-plugins/tmux-yank
 
     [prefix]y - copies text from the command line to clipboard.
-    [prefix]Y - copy pane current working directory to clipboard.
+    [prefix]Y - copy current working directory to clipboard.
 
     copy mode bindings:
     y            // copy selection to system clipboard
     Y            // (shift-y) - "put" selection into command line - equivalent to copying a selection, and pasting it to the command line
+
+
+
