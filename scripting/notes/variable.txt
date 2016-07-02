@@ -1,12 +1,37 @@
 
 Variable name:
+
   • Case sensitive
   • Consist of a combination of letter and underscore
-  • Assignment operator is '='
-  • Note that no space are permitted on either side of '='
+  • If space is part of the name, surround the name with quote
 
+Assignment value to variable:
 
+    assign operator: '=' (no space are permitted on either side of '=')
 
+To use a variable in a command:
+
+  • precede the name by a dollor sign.
+
+        $ a=hello123
+        $ echo "XXX $a XXX"
+        XXX hello123 XXX
+
+  • you can encapsulating the variable name with ${} to avoids
+    confusion when concatenated with text.
+
+        $ a=hello123
+        $ echo XXX${a}XXX
+        XXXhello123XXX
+
+To delete a variable:
+
+    $ unset myVariable
+
+    • when a variable is unset it becomes undefined
+    • Reading an undefined variable will receive empty string
+    • If set option nounset is set (via, set +o nounset), reading
+      an undefiend variable will result in error
 
 
 Special variable inside script:
@@ -15,15 +40,6 @@ Special variable inside script:
     $1, ..., $n  are the nth argument passed into the script
     $@           holds a space delimited string of all arguments passed to
                  the script
-
-
-Encapsulating the variable name with ${} is used to avoid ambiguity.
-
-    $ a=hello123
-
-    $ echo "XXX ${a} XXX"
-    XXX hello123 XXX
-
 
 Extra white space will be removed from a string:
 
@@ -40,20 +56,28 @@ To preserve space, surrround the variable with double quote:
     a b    c     xxx
 
 
-
 Substitution:
-To assign the result of a command to variable, use back-ticks or $():
 
-    $ a=`echo hello`
-    $ echo $a
-    hello
+    You can assign the value for a variable with the result of a command
+    execution. To do this you use back-ticks or $():
+
+        $ a=`echo hello`
+        $ echo $a
+        hello
+
+        $ b=$(echo bye)
+        $ echo $b
+        bye
 
 
-    $ b=$(echo bye)
-    $ echo $b
-    bye
+To prepend or append a value to an existing environment variable
 
-    In otherword, back-ticks or $() capture the result of cammand execution.
+    $ NAME=prepend_value$NAME
+    $ NAME=$NAMEappend_value
 
+    Appending and prepending is commonly used with the PATH variable
+    and a colon is used as a separator:
+
+        $ PATH=${PATH}:${XYZ_DIR}
 
 

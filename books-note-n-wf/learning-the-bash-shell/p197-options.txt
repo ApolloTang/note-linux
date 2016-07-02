@@ -13,7 +13,9 @@ to type or edit your commands you enter:
 
     set -o vi
 
-to unset vi mode you use "+" in lieu of "-"
+to unset vi mode you use "+" in lieu of "-":
+
+    set +o vi
 
 The use of plus "+" and minus "-" signs is counterintuitive:
 
@@ -61,24 +63,24 @@ Legacy
         set -o noglob
 
 
-    options have a on-letter abbreviations that is synomyn to
-    to 'set -o <option>':
-
 
 shopt
 =====
+
+ref: Search for 'shopt' in 'man sh'
 
 'shopt' is a replacement for 'set -o' in bash 2.0.
 It uses '-s' and '-u' instead of '+' or '-' to set or unset a shell
 s behaviour properties. For example:
 
-    set -o -s vi
-    set -o -u vi
+    shopt -o -s vi
+    shopt -o -u vi
 
 is identical to
 
     set -o vi
     set +o vi
+
 
 Note that if you omit -o flag you will have access to additional
 property not availalble to 'set -o'.  Search for 'shopt' in
@@ -86,10 +88,16 @@ property not availalble to 'set -o'.  Search for 'shopt' in
 
 To print a list of value for all available options, simply type:
 
-    'shopt -o' or 'shopt -p -o'
+    'shopt -o'
 
-The -p flag will give you a reusuable command snippet that can
-be use to produce the current setting.
+Note that the items print out with above have additional property
+not available to 'set -o'.  To use shopt to print a list of property
+only access-able by 'set -o' use:
+
+    'shopt -p -o'
+
+The -p flag gives you a reusuable command snippet that can
+be use to produce the current setting using 'set -/+o'.
 
 
 
