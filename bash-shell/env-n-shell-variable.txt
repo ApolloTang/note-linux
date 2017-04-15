@@ -85,9 +85,31 @@ To print a list of variable name and its value:
         $ export
 
 
+----------------------
+
+    You can also do something like this:
+
+    VAR=val application
+    For example:
+
+    LANG=C ls --help
+    output in English.
+
+    LANG=pl_PL ls --help
+    output in Polish (if avaliable).
+
+    In the past in sh you couldn't do export VAL=val. You had to
+
+    VAL=val; export VAL
+
+    Ref:
+    http://superuser.com/questions/143413/setting-linux-environment-variables
+
+---------------------
 
 ToREAD:
 https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps
+http://superuser.com/questions/143413/setting-linux-environment-variables
 
 
 
