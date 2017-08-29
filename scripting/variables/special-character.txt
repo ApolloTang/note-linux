@@ -1,0 +1,22 @@
+
+
+# & * ? [ ] ( ) = | ^ ; < > ` $ " ' \  Bourne Shell
+
+ 
+^ $ . [ ] { } - ? * + ( ) | \          regEx
+
+
+
+* ? [ ] ( ) | ^ $ \                   common in regEx and Bourne Shell
+
+
+
+. { } - +                             regEx only
+
+
+# & = ; < > ` " '                     Bourne Shell only
+
+
+When we pass regular expressions containing metacharacters on the 
+command line, it is vital that they be enclosed in quotes to 
+prevent the shell from attempting to expand them.

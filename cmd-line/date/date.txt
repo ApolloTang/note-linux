@@ -1,0 +1,6 @@
+
+$ date "+%y+%m+%d"
+12+12+28
+
+
+CURRENT_TIME=$(date +"%x %r %Z")

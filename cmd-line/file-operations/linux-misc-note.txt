@@ -1,0 +1,19 @@
+
+:: using '--' with file name begin with '-'
+
+    wc -filename    # <— word-count filename start w a ‘-‘ fails.
+                    #    because the comand think -filename is
+                    #    an option of command wc.
+
+    wc -- -filename # works
+    wc ./-filename  # works too
+
+
+:: Home directory variable '~'
+
+    echo ~           #/User/apollotang
+    echo ~fred       #/user/fred
+
+
+
+

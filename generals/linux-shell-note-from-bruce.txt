@@ -1,0 +1,2365 @@
+
+Unix Shell
+==========
+
+TODO: define File globbing, word splitting
+TODO: running commands in {}
+
+
+References
+----------
+codecoffee.com/tipsforlinux/articles/030.html
+techrepublic.com/article/master-the-linux-bash-command-line-with-these-10-shortcuts/5827311
+http://tldp.org/LDP/abs/html
+
+
+Contents
+========
+
+1  Background
+   1.1  Introduction
+   1.2  Basics
+   1.3  Tips & Tricks
+   1.4  Folder Syntax
+   1.5  Command Arguments
+   1.6  Man Pages
+2  Shell Commands 
+   2.1  Basic Commands
+   2.2  More Commands
+   2.3  General Utilities
+   2.4  Networking
+   2.5  OS/process/shell Utilities
+        2.5.1 Filesystem
+        2.5.2 Processes
+        2.5.3 Users and Groups
+   2.6  Scripting Commands
+3  Shell Setup
+   3.1  Environment Variables
+   3.2  File Globbing
+   3.3  IO Redirection
+   3.4  Hotkeys
+4  Bash Shell Scripting
+   4.1  Genereal
+   4.2  Special Variables
+   4.3  Special characters
+5  Arithmetic & Comparism
+   5.1  Integer
+   5.1  Strings
+   5.1  Files
+   5.1  Boolean
+   5.1  Arithmetic
+6  Signals
+
+
+
+Background
+==========
+
+Introduction
+------------
+Depending on the section the scope may be Linux, Unix, and POSIX-compliant
+system, any Linux shell or the Bash shell.
+
+There are many linux shells available such as Bourne Shell, Bourne Again Shell,
+C Shell, Korn Shell, etc.  Bash is the default for Red Hat, Ubuntu (and ...) and
+the most popular.
+
+Windows users can use cygwin, a program that emulates the linux environment with
+its own shell.  Virtualbox is another option but is very resource hungry.  Both
+have their limitations since neither is a native linux environment.
+
+
+Basics
+------
+- 'The "working directory" is the current directory you are in.  By default at
+  login the working directory is set to the home directory.
+- file may refer to a file or folder.  Usually, an optional directory path may
+  precede a file; this is why a file may be referred to as 'location file'
+- Many commands which read a file as input will alternatively read from stdin if
+  no input file is provided.
+- If a single argument includes spaces use an escape sequence (\) before the space
+  or enclose the argument in quotes. E.g.,
+    cd some\ dir
+    cd "some dir"
+  Some special characters are escaped with double quotes while others require
+  single.
+- Entering Ctrl-C generates the EOF (End Of File) character.  This may either be
+  caught by programs running in the shell, or terminate the program
+- Ctrl-Z is called the suspend character.  It stops a running process and returns
+  you to the shell prompt.
+- A command executed is called a task.  In the OS it is a single process and has
+  an associated PID
+
+
+Tips & Tricks
+-------------
+- Run a program without blocking the prompt until exit by appending ' &'.  This
+  runs it in a seperate process
+    e.g. 'gedit fileName.txt &'
+- Start a command with ! and type a prefix of a previous command; the shell will
+  run the most recent, matching command
+- Hitting Ctrl-D in the shell generates the special EOF (end-of-file) character.
+  In a CLI-only environment this will invoke log out, whereas in a GUI it will
+  end the terminal session and close the window.
+- Ctrl-C deletes any text written on the prompt
+    Note: This will not work in a Windows shell ssh'ed into a linux session
+- echo $SHELL displays the current shell running
+- Set the prompt (default is $): PS1=new_prompt
+- /dev/null is a special file that discards all data written to it, but reports
+  the write operation succeeded.  Any process reading from /dev/null receives EOF
+  immediately.  See grep for an example of its use.
+- The commands 'whoami', 'id -u -n', and 'echo $USER' print the current username.
+  'id -u' prints the user ID
+- Paste multiple lines of text into the terminal to be saved in a file with the
+  command 'cat > filename'.  cat will then take input from stdin, hit Ctrl-D to end.
+- Generate random numbers with the $RANDOM shell variable.  After each access it
+  is set to a new random number.
+
+
+Folder Syntax
+-------------
+- In Unix systems the forward slash is used (/)
+    Symbol  Meaning
+    ./      current directory
+    ../     parent directory
+    /       root directory
+    ~/      home directory
+- It is considered convention to end folder names with a / to help differentiate
+  from files, however either is syntactically valid.
+- A file may begin with '.' to indicate it is a hidden file.  'ls' will not
+  show these files but 'ls -a' will.
+
+
+Command Arguments
+-----------------
+http://stackoverflow.com/a/2160165/945070 [INCOMPLETE]
+
+- Some arguments are generic, thus identical among many commands
+    -h      print a help message
+    -h      human readable, applies to 
+    -p      print
+    -v      verbose
+    -V      version
+    -r, -R  recursive
+    -f      force
+    -i      interactive, prompt before (overwrite, removal, etc)
+
+
+Man pages
+---------
+- When enclosed in [], the argument is optional
+- When followed by ..., there may be multiple options/arguments.  E.g., file...
+  may specify file1.txt file2.txt
+
+
+
+Shell commands
+==============
+
+Basic Commands
+--------------
+- options enclosed in [] are optional, those not are requierd
+- arguments are stated in their short-form followed by their long-form.  When
+  the latter includes a value it also applies to the short-form, e.g.
+    -t, --tabs=NUMBER
+
+
+cd path
+    Moves to the specified directory.  With no arguments, moves you to the home
+    directory.
+
+
+cat [option]... [file]...
+    concatenate files and print on the standard output.  If file is not provides
+    standard input is used instead.  With multiple files cat displays their text
+    seamlessly one after another.  Cat is favorable to less when displaying small
+    files, since it is displayed in-line.
+    E.g., paste to a file using cat, enter ctrl-d when done to send EOF
+        cat > file.txt
+    Note: a common improper use of cat is to pipe a single file to another
+    command.  The file should be passed as an argument to the command or by
+    redirecting stdin.  E.g.,
+        Bad:  cat file.txt | grep "<regexp>"
+        Good: grep "<regexp>" file.txt
+    See also: tac
+
+
+clear
+    Wipes the terminal window, the prompt will be on the first line.
+
+
+cp [option] <source> <dest>
+    copy file(s) source to folder dest.  If source is a folder, the -R argument
+    is needed.
+    -r, -R, --recursive
+        copy directories recursively
+    -s, --symbolic-link
+        make symbolic links instead of copying
+    -v, --verbore
+        explain what is being done
+    See also: mv
+
+
+echo [option] [string]
+    display a line of text
+    -e
+        Enable interpretation of backslash escapes 
+
+help [command]
+    Brief help document for command.  command may be a single command, a pattern
+    to return help docs on all matching commands.  If not specified a list of
+    all internally defined shell commands is given.
+    Note: not all commands contain a help doc, try running command --h
+    See also: man
+
+
+info [name]
+    Gives a description of command name, including the flags that can be set
+
+
+less [fileName]
+    View a file in the console, or stdin limited to one page if no file specified.
+    It allows forwards as well as backwards movement (by hitting d and u,
+    respectively).  The entire file does not have to be read to begin viewing,
+    making less a good choice for viewing large files.
+    Seaching is done the same way as in vim and uses regular expressions.
+    -i
+        Searches are done case-insensitive
+    See also: cat, more, vim
+    
+
+ls [option] <file>
+    Lists contents of current folder, include '-a' for hidden files.  If file is
+    specified, ls will only list that file or files is a wildcard is used.  If
+    file is a directory, ls will behave the same way as if a cd file then ls with
+	no arguments were ran.
+	-R, --recursive
+        list subdirectories as well.
+	-a, --all
+        do not ignore entries starting with . (temporary files)
+	-l
+        long listing format, displays access priveledges, dates, size, etc
+	-h, --human-readable
+        used with -l to list size in human readable format
+	-S
+        sort by file size
+    -t
+        sort by modification time with most recent first.  Reverse with -tr
+    -X
+        sort alphabetically by file extension
+    -x
+        list entries by lines instead of by columns
+    --colour[=WHEN]
+        control whether colour is used to distinguish files types.
+        WHEN may be never, always, or auto
+    -1
+        Display one file per line
+
+
+man [S] NAME
+    Formats and displays the on-line manual page of name.
+    If you specify a section number S, man only looks in that section of the manual,
+    for example, printf is both a standard C function (3) and a shell command (1).
+    By default man is piped to less
+
+    NAME is normally the name of the manual page, which is typically the
+    name of a command, function, or file. The sections are:
+        1   General commands
+        2   System calls
+        3   Library functions, in particular the C standard library
+        4   Special files, usually devices found in /dev and drivers
+        5   File Formats and conventions
+        6   Games and screensavers
+        7   Mischellanea
+        8   System administration commands and daemons
+    The following are included on some systems or user installed:
+        0   C library header files
+        9   Kernel routines
+        P   POSIX specifications
+        n   Tcl/Tk keywords
+        x   The X Window System
+    xman - a GUI version of the man pages
+
+
+mkdir NAME
+    Creates a directory of that name in the current directory
+    -p, --parents
+        do not return an error if folder exists; create parent
+    directories as needed.
+
+
+mv [option] <source> <destination>
+    move file(s) from source to destination
+    destination may also include a file name, determined as such is the name following the final /,
+    if any, does not match an existing file.  Because of this feature mv may also be used for renaming.
+    See also: cp
+    
+
+pwd
+    Print the path of the working directory
+
+
+rm [option] file...
+    Permantly deletes a file without asking.  To delete folders, e.g. when using
+    a wildcard in file, -R must be used.  Multiple files may be specified, e.g.
+    rm file1.txt file2.txt
+    -f, --force
+        Ignore nonexistent files, never prompt
+    -r, -R, --recursive
+        Remove directories and their contents recursively
+
+
+rmdir [option] <dir>
+    permantly deletes an empty directory
+    --ignore-fail-on-non-empty
+        Ignore each failure that is solely because a directory
+        is non-empty
+    -p, --parents 
+        Remove dir and its ancestors.  E.g., 'rmdir -p a/b/c'
+        is equivalent to 'rmdi a/b/c a/b a'
+
+
+touch fileName
+    Chance the timestamp of a file.  Touch can also be used to create a new,
+    empty, text file.
+
+
+More Commands
+-------------
+alias [-p] [name[=value]]
+    Run with no commands or -p, alias prints the list of aliases.
+    Run with just NAME, alias prints the VALUE associated with NAME.
+    Note that alias does not work in all contexts, like when a command is passed
+    as an argument to another command.
+    See also: unalias
+
+
+awk | gawk | pgawk
+    Pattern scanning and processing language
+    -F, --field-separator <fs>
+        Use fs for the input field separator
+    Examples:
+    Print every line from the file
+      awk '{print;}' file.txt
+    Print the lines which matches with the pattern, each pattern separated by newlines
+      awk '/<pattern>/ > /<pattern>/' file.txt
+    Print only specific field, each whitespace-delimited field is stored in $n
+      awk '{print $2,$5;}' file.txt
+    Sum numbers in a file
+      awk '{ sum += $1 } END { print sum }' file.txt
+
+    See also: sed
+
+
+basename <name>
+    strip directory and suffix from filenames
+    See also: dirname
+
+
+bash [option] <file>
+    An sh-compatible interpreter that runs commands from standard input or file.
+
+
+cmp [option] <file1> <file2>
+    compare 2 files
+    -i SKIP, --ignore-initial=SKIP
+        Skip the first SKIP bytes of input
+    -l, --verbose
+        Output byte numbers and values of all differing bytes
+    -n LIMIT, --bytes=LIMIT
+        Compate at most LIMIT bytes
+
+
+col
+    filters out reverse (and half reverse) line feeds so the output is in the
+    correct order with only forward and half forward line feeds, and replaces
+    white-space characters with tabs where possible.
+
+
+compress [file ...]
+    Compress files using the zip archive.
+    INCOMPLETE
+    See also: tar, zip, unzip
+
+
+cut <option> [file]
+    Remove sections from each line
+    -c, --characters=LIST
+        only select characters in list.
+    -d, --delimiter=<delim>
+        use delim instead of tab for field delimiter.
+    -f, --fields=LIST
+        select only these fields.  list is a comma-separated
+        list of fields to print.  Also prints any line that contains no delimiter,
+        character unless the -s option is specified.
+    -s, --only-delimited
+        do not print lines not containing delimiters.
+
+    Use only one of -b, -c, or -f.  Each LIST may contain one or more ranges,
+    comma separated.  Counting starts at 1, not 0.  E.g.,
+        n       The nth element
+        n-      The nth element to the end of line
+        n-m     The nth to mth elements
+        -m      From the beginning to mth element
+
+    e.g.
+        cut -s -d="," f1,3 - separate using the delimiter "=" and print the first
+        and third fields.  Exclude lines with no "=" matched.
+    See also: sed, grep
+
+chgrp [OPTION]... GROUP FILE...
+    Change group ownership
+    -c, --changes
+        Like verbose, but report only when a change is made
+    See also: chown, chmod
+
+
+chmod [option] <mode> <file>
+    change access permissions on file.  To view current file permissions run
+    ls -l file.
+    Note a folder can have execute permissions applied to it.
+    -R, --recursive
+        change files and directories recursively
+    Character Permissions
+        r   Read
+        w   Write
+        x   eXecute
+        X   Special Execute, applies execute permissions to directories regardless
+            of their current permissions and applies execute permissions to a
+            file which already has at least 1 execute permission already set.
+    Numerical Permissions
+        0 000   None
+        1 001  Execute only
+        2 010  Write only
+        3 011  Write and Execute
+        4 100  Read only
+        5 101  Read and Execute
+        6 110  Read and Write
+        7 111  Full
+        The respective permissions are found by using powers of 2.  The number
+        for a given combination of permissions of the sum of the individuals.
+    Class Permissions
+        u   user
+        g   group
+        o   owner
+        a   all, same as ugo
+
+    Examples
+        [Incomplete]
+
+    See also: chown
+
+
+chown [option] [owner][:[group]] file ... - change file owner and group
+    -R - recursively change file owner
+    -v - verbose
+    E.g.,
+        chown username somefile
+        chown username:usergroup somefile
+        chown -R username somedir
+    See also: chgrp, chmod
+
+
+date [option] [+format]
+    Print or set system date and time.  Prints the date in the givcen format if
+    provided.
+    -u, --utc, --universal
+        print or set Coordinated Universal Time
+    E.g.,
+        date +"%Y/%m/%d %H:%M" prints 2013/03/24 23:03
+
+
+diff [options] from-file to-file
+    Find differences between two files
+
+
+dirname <name>
+    Strip non-directory suffix from file name
+    See also: basename
+
+
+dos2unix <file>
+    Converts file from DOS/MAC newline format to UNIX
+
+
+eval [arg ...]
+    Read args and concatenate them together into a single command.
+    The command is then read and executed by the shell.  Its exit status is
+    returned as the value of eval.
+
+
+expand [option] <file>
+    Convert tabs in each file to spaces, writing to standard output.  If no file
+    is specified, reads from standard input.
+    -i, --initial
+        do not convert tabs after non blanks
+    -t, --tabs=NUMBER
+        replace each tab with NUMBER spaces, default is 8
+
+
+export [option] name[=value]
+    Set an environment variable and make it available to child processes.  If no
+    argument or the -p is given a list of exported names in the current shell is
+    printed.
+    -f
+        name applies to a function name
+    -p
+        print environment variables
+
+file [option] <file> 
+    Determine file type.  Useful with a symbolic link for printing its target.
+    
+
+find [option] [path] [expression]
+    Searches the directory tree rooted at path for files matching  the given
+    regular expression.
+	
+    -name <pattern>
+        matches files in path against the shell pattern.
+        Note: a shell pattern is different than regular expressions, e.g. it uses
+            the Unix wildcard *
+        Note: when using the shell wildcard enclose in "" to avoid shell expansion
+	-iname
+        Same as name but case insensitive
+    -wholename
+        Same as name but may include multiple directories and joining '/'
+    -maxdepth <n>
+        Max recursive depth to search
+	-mtime [+|-]<n>
+        File was last modified greater than (+) or less than (-) n*24 hours ago
+    -P
+        Never follow symbolic links.  Default behaviour.
+	-L
+        Always follow symbolic links.
+    If searching for a folder, -type may be used to specify searching folder names
+    only.  This can result in significant speed-ups.
+    -type C
+        File is of type C:
+        d   directory
+        f   regular file
+        l   symbolic link
+    -user <username>
+        File belongs to username
+    -exec <cmd>
+        Execute the command cmd on the file found.  See below for an example.
+        Note: multiple commands may be executed by providing the -exec argument
+        once for each command.
+
+    Tests
+        Arguments: +n for greater than n, -n for less than n, n for exactly n
+
+    Before a recursive option was added to many commands, find was used.  For e.g.,
+    touch does not have a -R option to date.  A recursive touch may be acheived like:
+        find . -exec touch [option] {} \;
+    {} is the absolute path of each match returned by find, \; indicates end of
+    command and must be escaped to prevent it from being interpreted by the shell.
+    Note the space between } and \.
+
+
+grep [option] <pattern> [file]
+    Stands for Grouped REgular Expressions.  Searches file for lines matching
+    the regular expression <pattern> and returns all lines matching <pattern>.
+    egrep is equivalent to grep -E, and interprets <pattern> as an extended
+    regular expression.
+
+    If no file is specified, grep reads from standard in and outputs each line
+    matched.  This is useful when piping output of another command using |, e.g.
+            ls | grep <pattern>
+            grep <pattern> someFile | grep anotherPattern
+            
+    -R, -r
+        Recusrive; searches all files in directory file.
+            grep -R <pattern> .
+        A wildcard like *.txt only works with --include, --exclude options
+    -i
+        case-insensitive
+    -h
+        Supress the prefixing of fileNames on output when multiple files are searched
+    -n
+        Prefix each line of output with the line number within its input file
+    -c
+        Supress normal output and print a count of matching lines for each input file
+    -v, --invert-match
+        Select non-matching lines
+    -m, --max-count=<NUM>
+        Stop reading a file after NUM matching lines
+    -e PATTERN, --regexp=PATTERN
+        Use PATTERN as the pattern.  This can be used to specify multiple search
+        patterns, or  to protect a pattern beginning with a hyphen (-).
+    -o, --only-matching
+        Only return the regex's match
+    -q, --quiet, --silent
+        Quiet; do not write anything to standard output.  Useful when only
+        interested in return value e.g., in scripts.
+
+    OR operator e.g.,
+        grep "exp1\|exp2" file
+
+    If there is a lot of output that says "grep: /some/folder/path: No such file
+    or directory" you can usually ignore it.  It can be avoided by filtering grep's
+    stderr output with 2> /dev/null
+
+    Grep special characters, need to be escaped (in grep, not the shell)
+        ?  \  .  ( )  ^  $
+    To avoid escaping these characters use egrep (Extended Grouped Regular
+    expressions) by running "egrep" or "grep -e".
+    Note: this is separate from characters requiring escaping from the shell
+
+    See also: find, cut
+
+
+gzip
+    compress or expand files
+    -l --list
+        For each compressed file list various information
+    -d --decompress --uncompress
+        Decompress
+    See also: tar
+
+
+head [options] [file]
+    Print the first 10 lines of each file to standard output.
+    -n, --lines=N
+        print first N lines of each file
+    See also: tail
+
+
+history [n]
+    Displays a numbered history of commands.  A * indicates the command has been
+    modified.  If N is provided only the last n commands are displayed.
+    -d, --delete <n>
+        Delete nth command in list
+
+
+ln [option] target linkName
+    Make a link to target with linkName.  By default ln makes a hard link.  This
+    won't work with folders.
+    -s
+        Symbolic link.
+    See also: find
+
+
+more [fileName]
+    A filter for paging through text in fileName or stdin if not
+    provided one screenful at a time. It is especially primitve. Users should
+    realize that less provides more emulation and extensive enhancements.
+    +K
+        start at line number k
+    Note: less supports backwards scrolling, searching, etc, and more commonly used
+    See also: cat, less
+
+
+od - dump files in octal and other formats
+    -c, -t c
+        Select ASCII characters or backslash escapes
+    -b, -t b
+        Select octal bytes
+    -x, -t x2
+        Select hexadecimal 2-byte units
+    -N<n>
+        Read the first <n> bytes of a file
+    -j<n>
+        Skip the first <n> bytes of a file
+    See also: strings
+
+printenv - print environment variables
+
+
+rename FROM TO file
+    replaces the first occurrence of FROM with to in the files file
+    rename foo foo0 foo? will rename foo1, foo2, to foo01, foo02
+    rename foo foo00 foo?? will rename foo10, foo21, to foo010, foo021
+    Note: if you with to do a plain rename without substring matching use mv
+    See also: mv
+
+
+sed [option] [inputFile]...
+    stream editor for filtering and transforming text
+    -n, --quiet, --silent
+        suppress automatic printing of pattern space
+    -i, --in-place[=suffix]
+        Make changes in file instead of printing to stdout
+    
+    s/<regexp>/<replacement>/ - Substitute
+    s/<regexp>/<replacement>/g - Substitute each time found, not first on each line
+    /<regexp>/d - Delete
+    E.g. replace text in a file:
+        sed -i "s/<matchPattern>/<replacement>/" FILENAME
+    See also: awk, tr, cut
+
+
+shuf [option] [file]
+    Generate random permutations
+
+
+sleep n[suffix]
+    pauses for n amount of time.  Suffix may be:
+    S   seconds, the default
+    M   minutes
+    H   hours
+    D   days
+    Some implementations support floating point NUMBERs, while other only integers
+
+
+sort [option] [file]...
+    Sort lines of text files and print to stdout.
+    -r, --reverse
+        reverse the result of comparisons
+    -k, --key=POS1[,POS2]
+        start a key at POS1, end it at POS2
+    -u, --unique
+        output only the first of an equal run
+    -V
+        natural sort of (version) numbers within text
+    See also: shuf
+
+
+strings
+    Print the strings of printable characters in files, supresses non-printable
+    characters.  Useful for reading a binary file which may contain some text. 
+    See also: od
+
+
+tail [file]
+    print last 20 lines of a file
+    -n, --lines=K
+        output the last K lines
+    -f, -F, --follow
+        Output appended data as the file grows, Ctrl-C to exit
+    See also: head
+
+
+tac [option]... [file]...
+    concatenate and print files in reverse.  Works the same way as cat but lists
+    files backwards.
+
+
+tar [option] TARfile file1 [file2 ...]
+    packages a collection of files into a single .tar archive TARfile, and can
+    restore the files.  Compresses if the option is specified.  file is specified
+    last and may be a single or list of files or a wildcard.  Unlike Windows,
+    Unix compresses files in a two step process, first using tar to put files
+    into a collection and second compressing them with a format like gzip,
+    resulting in e.g. file.tar.gz.
+    
+    -c, --create
+        create an archive
+    -x, --extract
+        extract an archive
+    -f, --file=archive_name
+        name of archive
+    -z, --gzip
+        (un)compress the file using gzip compression
+    -j, --bzip2
+        (un)compress the file using bzip2 compression
+    -t, --list
+        list the contents of an archive
+    -v, --verbose
+        print each file as its archived/extracted
+    -p, --preserve-permissions
+        maintains original file permissions
+    -h, --dereference
+        follow symbolic links, not done by default
+    -C, directory <dir>
+        change to directory dir, Note: if this option is not used and an
+        absolute path is supplied the full path will be preserved.
+        E.g.,
+            tar -C /full/path/to/files -czf compressedFile.tgz dirToCompress/
+
+  Examples
+    Note: might not work with - in front of options
+    Create a tar gzipped archive
+        tar cvzf archive_name.tar.gz dirname/
+    Note: .tgz is the same as .tar.gz
+    Note: .tbz and .tb2 is same as .tar.bz2
+    
+    Extract a bzipped tar archive
+        tar xvfj archive_name.tar.bz2
+    
+    List the contents of an archive
+        tar tvf archive_name.tar
+    
+    Extract a single file
+        tar xvf archive_file.tar /path/to/file
+    
+    Extract a single directory
+        tar xvf archive_file.tar /path/to/dir
+    Note: multiple files/directory may be specified to extract more than one
+
+    See also: zip, unzip
+
+
+type [option] name [name ...]
+    Display information about command type.  Can also be used on special characters. 
+    -a
+        Display all locations containing an executable named NAME; includes
+        aliases, builtins, and functions, unless the '-p' option is used
+    -t
+        Output a single word which is one of 'alias', 'keyword', 'function',
+        'builtin', 'file' or '', if NAME is an alias, shell reserved word, shell
+        function, shell builtin, disk file, or not found, respectively.
+
+
+touch [option] file
+    Change access and modfication times of each file to current time.
+    -r, --reference=file
+        Use files timestamp as a reference instead of current time.
+    -t STAMP
+        Use [[CC]YY]MMDDhhmm[.ss] instead of current time
+    May also be used to create a new file with:
+        touch newfileName
+
+
+tr [option] <set1> [set2]
+    Translate and/or delete characters from stdin to stdout
+    E.g., convert characters from uppercase to lowercase:
+        tr '[:upper:]' '[:lower:]' < input.txt > output.txt
+    See also: awk, sed
+
+
+unalias <name>
+    remove the alias associated with NAME
+    -a
+        Remove all aliases
+    See also: alias
+
+
+unset <name> 
+    unsets an environment variable
+    See also: export, setenv
+    
+
+unzip [option] file[.zip] 
+    Extract zipped file to the current directory
+    -d <extract_dir>
+        Extract files to extract_dir
+    See also: zip, tar
+
+
+wc [option] <file> 
+    Count the number of words in file or if not provided from
+    stdin
+    -c, --bytes
+        print the byte count
+    -m, --chars
+        print the character count
+    -l, --lines
+        print the newline counts
+    -L, --max-line-length
+        print the length of the longest line
+    -w, --words
+        print the word count
+
+
+which 
+    shows the full path of (shell) commands.
+
+
+zip [option] [archive] <file1> [file2 ...]
+    Compresses files
+    -r
+        Copy subdirectories recursively
+    See also: unzip, tar
+
+
+General Utilities
+-----------------
+
+ctags
+    A vim utility to navigate source code, jumping to definitions in different
+    files to use ctags on a project.  A file named "tags" is created by running
+    this command in the root directory of the project:
+        ctags -R .
+    This file needs to be updated as the code changes.
+    Jump to a definition in vim with:
+        <C-]>
+    Jump back up the tree with:
+        <C-t>
+    If vim does not pick up the ctags file point to it with:
+        :set tags=/path/to/tags
+    
+    See also: cscope, vi
+    blog.stwrt.ca/2012/10/31/vim-ctags
+
+
+crontab
+    crontab is the program used to drive the cron daemon
+
+    -e
+        edit user's crontab
+    -l
+        list user's crontab
+    -r
+        delete user's crontab
+
+    cron is the time-based job scheduler in Unix-like computer operating systems.
+    cron enables users to schedule jobs (commands or shell scripts) to run periodically
+    at certain times or dates. It is commonly used to automate system maintenance
+    or administration, though its general-purpose nature means that it can be used
+    for other purposes, such as connecting to the Internet and downloading email.
+
+    Note that cron is run in a separate environment than that of normal users.
+    That means:
+    - Environment variables are set differently/not set at all
+    - Some commands may not be found due to PATH set differently
+    - It is considered good form to call commands like "/bin/ls" instead of "ls"
+    - Development of cron tasks need to be tested in the cron environment (by
+      running them from cron) before deploying
+
+    Since cron is a daemon it only need be started once.  To check if it is running:
+        ps aux | grep crond
+    To start cron add the line 'crond' to any startup script.
+
+    To run a job on a calendar schedule place in one of the folders:
+        /etc/cron.hourly
+        /etc/cron.daily
+        /etc/cron.weekly
+        /etc/cron.monthly
+
+    The cron config file is /etc/crontab.  By default it looks like:
+        01 * * * * root run-parts /etc/cron.hourly
+        02 4 * * * root run-parts /etc/cron.daily
+        22 4 * * 0 root run-parts /etc/cron.weekly
+        42 4 1 * * root run-parts /etc/cron.monthly
+    The format is:
+        minute hour dom month dow user cmd
+    user is an optional field.  cmd may be space separated.
+
+    Each user also has a contab file of the same format.  To add a job add lines
+    with this format by running:
+        crontab -e
+    E.g.
+        1 * * * * root echo "This job will run one minute past every hour"
+        */5 * * *  root echo "This job will run every 5 minutes on the hour"
+        30 14 * * * root echo "This job will run every day at 14:30"
+
+    
+    Users allowed or denied access are laid out in the files
+        /etc/cron.allow
+        /etc/cron.deny
+
+    UnixGeeks.org/security/newbie/unix/cron-1.html
+
+
+cscope - interactively examine a C program [INCOMPLETE]
+    See also: ctags, vi
+
+
+dd
+    Low-level utility to copy and convert a file [INCOMPLETE]
+    
+
+emacs
+    command line text editor
+    See also: vi/vim, nano, xemacs
+
+
+gdb The GNU Debugger [INCOMPLETE]
+    GDB can execute a program line-by-line to see the values of registers, set
+    breakpoints.  By parsing a core dump file it can see what was going on
+    inside a program at the moment it crashed.
+    -x, -command=file
+        execute GDB commands from file
+    -n, -nx
+        Do not execute commands from any "gdbinit" initialization files.
+        Normally, the commands in these files are executed after all the command
+        options and arguments have been processed.
+    GDB commands
+        bt, backtrace
+        bt <n>
+            print only the innermost n frames
+        bt -<n>
+            print only the outermost n frames
+        info
+        locals
+
+
+json_pp
+    Format JSON.  E.g.,
+        json_pp < foo.json
+
+
+stat [option] <file> ...
+    Display file or file system status.  Output a newline for each file.
+    -c, --format=<format>
+    --printf=<format>
+        Like format, but interprets baskslash escapes and does not output
+        newlines by default.  To print newline use \n.  
+    Some format options:
+        %n  File name
+        %s  Total size in bytes
+    E.g. print the name and size of all files in the current directory:
+        stat --printf="%n %s\n" *
+
+
+vi/vim
+    Command line text editor
+    LagMonster.org/docs/vi.html
+
+    Vim is an enhanced version of vi, it contains many more features.  Some
+    systems define the alias vi='vim'
+    
+    vim <file> opens file in the editor; a blank, unsaved document otherwise
+    
+    vim has two modes, command and insert mode.  When initially run, command mode
+    is active.  A third mode, visual mode, may be considered a subset of command
+    mode.
+    Switch to insert mode by typing i.
+    Switch to command mode by hitting esc.
+
+    Any command beginning with ":" is called a line mode command and performs
+    its duty on the line the cursor is currently on.  It may be applied to all
+    lines with:
+        :%<command>
+    or a range:
+        :x,y<command>
+    from somewhere to the end:
+        :x,$<command>
+
+    Commands
+    --------
+    Help                        :help
+    Help for a command          :h[elp] PATTERN (type a prefix then hit Ctrl-D for all results) 
+    List previous commands      ::
+    
+    Save a file                 :w fileName
+    Quit vim                    :q
+    Quit without saving         :q!
+
+    Navigating
+    ----------
+    End of a word               e
+    Foreward to start of word   w
+    Backwards to start of word  b
+    Foreward three words        3w
+    Beginning of the line       0
+    End of the line             $
+    Foreward one paragraph      {
+    Backwards one paragraph     }
+    Matching bracket            %
+    Top of screen               H
+    Middle of screen            M
+    Bottom of screen            L
+    Beginning of file           1G (or gg)
+    End of file                 G
+    Line 50                     50G
+    Up full page                Ctrl-b
+    Down full page              Ctrl-f
+    Up half page                Ctrl-u
+    Down half page              Ctrl-d
+    
+    Search                      :/<regex>
+    Search backwards            :?<regex>
+    Search case-insensitive     :/\c<regex>
+    Search current word         *
+    Search entire word          :/\<word\>m  
+    Next match                  :n
+    Previous match              :N (SHIFT + n)
+    first match                 :ggn
+    last match                  :GN
+    List matches in "pattern
+     window"                    ] I
+
+    Editing
+    -------
+    Delete current line         dd, :d
+    Undo changes                u
+    Redo changes                CTRL-R
+    Enable auto-indent          :set paste
+    Disable auto-indent         :set nopaste
+    Indent selected text        >
+    Unindent selected text      <
+
+    Search and replace (once
+     per line) on current line  :s/<search_pattern>/<replacement_string>/
+    Search and replace (once
+     per line) on all lines     :%s/<search_pattern>/<replacement_string>/
+    Search and replace
+     each occurrence            :s/<search_pattern>/<replacement_string>/g
+    Search and replace
+     with confirmation          :s/<search_pattern>/<replacement_string>/c
+
+    Copy                        y
+    Cut                         d
+    Paste                       p
+
+    Windows
+    -------
+    Edit another file
+     (in same window)           :e <filename>
+    Vertical split windows      :vsplit file
+                                :Ctrl-W v
+    Horizontal split windows    :Ctrl-W s
+    Close window                :Ctrl-W q
+                                :hide
+    Enter (new) shell prompt    :shell
+    Exit shell prompt           <C-d>
+                                exit
+
+    Plugins
+    -------
+    Plugins are usually placed in ~/.vim/plugin/, ~/vimfiles, or $VIM/vimfiles/
+    Update vim's help topics by cd'ing to the plugins location, running vim, then
+    running ":help[args] .", e.g. to load the taglist plugin run ":helptags ."
+    
+    If ctags have been run on the project, you can jump to the location a member
+    is defined with Ctrl-INCOMPLETE
+    
+    See also: ctags, csource, emacs, nano
+
+
+xemacs
+    A GUI version of the command line editor
+    See also: emacs
+    
+
+xkill
+    Kill a window
+    Turns the mouse into an X, the first window to be clicked is terminated.  It
+    may be cancelled with a right click.
+    Note: This includes the desktop
+
+
+
+Networking
+----------
+
+curl [options] [URL...] 
+    Transfer data to/from a server using one of its supported protocols.  The
+    URL syntax is protocol dependent.
+    -O
+        Store file using the filename in the URL
+    
+    -L, --location
+        (HTTP/HTTPS) Follow HTTP location headers, AKA redirects
+    
+    -C, --continue-at <offset>
+        Continue/resume a previous download at a given offset
+    
+    --limit-rate
+        Limit the max rate of download
+    
+    -u, --user username:password
+        Specify the user name and password to use for
+        server authentication.
+    
+    -A, --user-agent <agent string>
+        (HTTP) Specify the User-Agent string to send to the HTTP server.
+    
+    -H, --header <header>
+        (HTTP) Extra header to use when getting a web page. You may specify any
+        number of extra headers.
+    
+    -X, --request <command>
+        (HTTP) Specifies a custom request method to use when communicating with
+        the HTTP server.  Without this command the default is GET.  Normally
+        this command is not needed since other requests are often invoked with
+        specific options.
+    
+    -d, --data <data>
+        (HTTP) Sends the specified data in a POST request to the HTTP server, in
+        the same way that a browser does when a user has filled in an HTML form
+        and presses the submit button.
+
+        If data begins with '@' the rest should be a file name.
+    
+    E.g., download a single file.  This will display the file.  It may be
+    redirected to store in a file.
+        curl http://www.centos.org
+    See also: wget
+
+
+ftp [INCOMPLETE]
+    See also: sftp, wget
+
+
+ifconfig
+    Configure a network interface.  Run with no arguments to get ip addresses and
+    the status of currently active interfaces.
+    Set MAC address: INCOMPLETE
+
+
+iptables
+    Administration tool for IPv4/IPv6 packet filtering and NAT.  iptables can be
+    used to manually configure a firewall, but the same functionality allows for
+    mimicking network failures.  Such functoinality is described here.
+
+    E.g.,
+    Drop all tcp packets coming into localhost (127.0.0.1) at port 6379
+        iptables -A INPUT -p tcp -d 127.0.0.1 --destination-port 6379 -j DROP
+    Reject all tcp connection attempts coming into localhost (127.0.0.1) at port 6379
+        iptables -A INPUT -p tcp -d 127.0.0.1 --destination-port 6379 -j REJECT
+    Clear all rules
+        sudo iptables --flush INPUT
+
+
+lsof - List open files, may be used to list open sockets [INCOMPLETE]
+    -a
+        causes list selection options to be ANDed
+    -i [i]
+        List files whose Internet address matches i. If no address is specified,
+        this option selects the listing of all Internet and x.25 (HP-UX) network
+        files.
+    -n
+        Inhibits the conversion of network numbers to host names for network
+        files. Inhibiting conversion may make lsof run faster.
+    -P
+        Inhibits the conversion of port numbers to port names for network files
+
+
+mail [options] toAddr...
+    Send and receive mail.  The body of the email is read from stdin.
+    -s <subject>
+        Specifies a subject on the command line.  Enclose subjects
+    containing spaces in quotes.
+    -c <address>
+        Send carbon copies to the list of addresses
+    -b <address>
+        Send blind carbon copies to the list of addresses
+    -t
+        Extract recipients from message header
+    See also: sendmail
+
+
+netstat
+    Print  network connections, routing tables, interface statistics, masquerade
+    connections, and multicast memberships
+    -a, --all
+        Show  both  listening  and non-listening sockets
+    -n, --numeric
+        Show numerical addresses instead of trying to determine symbolic host, port or user names
+
+nslookup [option] <name>
+    Query Internet domain name servers for the ip address of a host or domain
+    name.  It can be used to verify for INCOMPLETE
+    See also: ping
+
+
+ping [option] <destination>
+    Test a network connection.  destination may be a URL (e.g. www.google.com)
+    or an IP address (e.g. 127.0.0.1)
+    -c <count> 
+        Attempt to ping at most count timesq
+    See also: nslookup
+
+
+rdesktop [options] server[:port]
+    A client for Remote Desktop Protocol (RDP), used in a number of Microsoft
+    products.
+
+
+rsync [option]... <src> <dest>
+    Copy files from src to dest.  Either src or dest may be a remote host,
+    in which case provide the username (user@host). Files or folders may be specified.
+
+    The remote shell to use can be specified, for example to encrypt the connection:
+        rsync -e ssh [options] src/ dest/
+
+    A main feature of rsync is an algorithm to only copy changes made to a file.
+    This decreases network usage and increases CPU usage. See --whole-file option.
+
+    -a, --archive
+        Does the following:
+        - Recursive mode
+        - Preserve symbolic links
+        - Preserve permissions
+        - Preserve timestamp
+        - Preserve owner and group
+    -v, --verbose
+        Verbose output.  Prints usage stats after transfer.
+    -r, --recursive
+        Copy directories recursively
+    -u , --update
+        Skip any files which have been updated more recently at the 
+        destination.  If update times are equal, the file is copied if the sizes are
+        different.
+    -t, --times
+        Update file modification times.  If this option is
+        not used the optimization that skips unmnodified files will not be effective.
+    --delete
+        Delete files on dest that do not exist on src.
+        This won't work if a wildcard is used (e.g. dir/*) since it is expanded by
+        the shell to individual filenames.
+    -C, --cvs-exclude
+        Prevent certain filetypes from being transferred.  E.g.
+        *.exe, *.o, *.obj
+    -z, --compress
+        Compress files being transferred.  Useful over a slow
+        connection.
+    --progress
+        Display progress like number of files copied and progress for
+    curernt file.
+    --existing
+        Only copy files which are preexisting at the destination.
+    --min-size=SIZE
+    --max-size=SIZE
+        Only copy files with a min/max size.  
+    -W, --whole-file
+        Copy entire files, instead of using rsync algorithm.
+
+
+scp [option] [[user@]host1:]file1 [[user@]host2:]file2 - Secure CoPy
+    Copies file1 from host1 to file2 at host2 using the ssh protocol.
+    If either host is omitted the file's location refers to the local machine.
+    If user@ is omitted the current username on the local machine is used.
+    If copying to and from remote hosts, they must be able to talk to each other
+    directly.  Otherwise you must first copy to your local machine then to host2.
+
+    -r
+        recursive copy
+    
+    hypexr.org/linux_scp_help.php
+    Copy the file "foobar.txt" from a remote host to the local host
+        scp username@remotehost.com:foobar.txt /some/local/directory
+    Copy the file "foobar.txt" from the local host to a remote host
+        scp foobar.txt username@remotehost.com:/some/remote/directory
+    Copy the directory "foo" from the local host to a remote host's directory "bar"
+        scp -r foo username@remotehost.com:/some/remote/directory/bar
+    Copy all contents of the current folder, including sub-folders
+        scp -r ./ username@remotehost.com
+
+    See also: sftp, ssh
+
+
+sendmail
+    posix sendmail.  Supports html formatted mail.  To make a mail html add the
+    following header above the html code:
+        Mime-Version: 1.0
+        Content-Type: text/html
+    See egmail.html, run with sendmail -t < egmail.html
+    -t
+        extract recipients from message header
+    See also: mail, egmail.html
+
+
+sftp [option] [[user@]host[:file [file]]]
+    Secure file tranfer program
+    -b <batchfile>
+        Specify a batch file to run commands from instead of reading
+    from stdin.
+    -F <sshConfig>
+        Specify an alternative per-user configuration file for ssh
+    See also: ftp, wget
+
+
+ssh [option] [user@]host
+    Secure SHell, encrypted remote login session.
+    Replaced Telnet, a legacy, unenctypted version.
+    -X
+        Enable GUIs to be displayed, if supported.
+    -o StrictHostKeyChecking=no
+        prevent prompt to accept RSA key on first connect
+    See also: scp, ssh-keygen
+
+
+ssh-keygen
+    Generate, manages and converts authentication keys for ssh.  It is run on the
+    user account and server to generate the keys for.
+    -t
+        specify the type of key to create, e.g. rsa
+    See also: scp, ssh
+
+
+tcpdump [INCOMPLETE]
+    dump traffic on a network
+    -i [interface]
+        Listen on interface.  Specify 'any' to listen on all.  If unspecified,
+        tcpdump searches the system interface list for the lowest numbered,
+        configured up interface.
+    -n
+        Don't convert host addresses to names.  This can be used to avoid DNS lookups.
+    -s
+    -w
+    -Xx
+
+
+tcpflow [option] [port <port>]
+    TCP flow recorder
+    Warning: this is a very cpu intensive process and will drag down system
+    performance.
+    -c
+        Console print.  Print the contents of packets to stdout as they are
+        received, without storing any captured data to files.
+    -i <iface>
+        Capture packets from the network interface named <iface>.  If not
+        provided a reasonable default will be used.
+    -p
+        No promiscuous mode
+
+
+traceroute
+    Trace the route packets take - INCOMPLETE
+
+
+wget [option] URL
+    Downloads files from the web.  It supports http, https and ftp.
+    URL format:
+        http://host[:port]/directory/file
+        ftp://host[:port]/directory/file
+    A standard URL leading to a download link also works.
+
+    -O, --output-document=<file>
+        Write the documenet to file instead of the default files
+    -r
+        recursively download folder.  Since wget -r follows the ../ link, add
+        --no-parent to avoid downloading parent folders.
+    -U, --user-agent-string=agent-string
+        Identify as agent-string to the HTTP server.
+
+    See also: curl
+
+
+OS/process/shell Utilities
+--------------------------
+
+free
+    Display amount of free and used memory in the system.
+    To find out used and free memory in system run "free -m"  and use the line
+    "-/+ buffers/cache".
+    See also: top, vmstat
+
+
+halt
+    Depending on system state tells the kernel to either poweroff or reboot
+    See also: poweroff, reboot
+
+
+initctl [OPTION]... COMMAND [OPTION]... ARG...
+    initctl allows a system administrator to communicate and interact with the
+    Upstart init(8) daemon.
+    [INCOMPLETE]
+
+
+insmod, lsmod, rmmod [filename]
+    Insert, list, remove module(s) in the Linux Kernel
+
+
+ldd [option] <file>
+    print shared library dependencies
+
+
+lsb_release [option] ...
+    Prints certain LSB (Linux Standard Base) and Distribution information
+    -v, --version
+        Display the version of the LSB specification against which the distribution
+        is compliant.  If no options provided this is the default.
+    -a, --all
+        Display all of the above information
+
+
+ntpd
+    Network Time Protocol (NTP) daemon
+    Sets and maintains the system time in synchronism with Internet standard time
+    servers.
+    ntpd -q works the same as ntpdate, which is a one-time synchronization.  The
+    use of ntpdate should be avoided, especially running on a shedule as a
+    replacement for ntpd because changing system time instantaneously is dangerous.
+
+
+poweroff
+    See also: halt, reboot
+
+
+reboot
+    Reboot the system
+    See also: halt, poweroff
+
+
+screen [option]
+    Screen manager with terminal emulation.  Save and resume terminal state
+    between logins, run jobs in the background, etc.
+
+    Run with no commands screen creates and enters a new session
+    
+    -ls, -list
+        list screen sessions
+    -S <name>
+        when creating a new session this option can be used to specify a
+        meaningful name
+    -r <name>
+        Resume a detached screen session.  Screen may be a substring match of a
+        screen name.
+    -dm
+        create screen in background
+
+    Ctrl + A + D will detach from a screen
+    Exit will terminate a screen
+
+    screen does not produce a history in the terminal, instead it must be
+    scrolled within the screen in Copy Mode.  To enter copy mode hit Ctrl + [ + a
+    or Ctrl + a followed by escape.
+
+
+
+set [option]
+    Set or unset shell variables.  Without options, the name and value of each
+    shell variable are displayed.  Shell variables have one characters codes.
+    E.g.
+        set -<var_code>
+            set a shell variable
+        set +<var_code>
+            unset a shell variable
+    -e
+        exit the shell on the first command that fails to return 0
+    -x
+        after expanding each command display the expanded value of PS4
+
+
+uname
+    Print system information
+    -a, --all
+        print all information
+    -i, --hardware-platform
+        print the hardware platform
+    -m, --machine
+        print the machine hardware name
+    -n, --nodename
+        print the network node hostname
+    -o, --operating-system
+        print the operating system
+    -p, --processor
+        print the processor type
+    -s, --kernel-name
+        print the kernel name
+    -v, --kernel-version
+        print the kernel version
+
+uptime
+    Prints how long the system has been running
+
+
+#### Filesystem
+
+df
+    File system disk space usage
+    -h, --human-readable
+        Print sizes in human readable format, instead of bytes
+    -T, --print-type
+        Print file system type
+
+
+du [option] [file]
+    Estimate file space usage
+    -h, --human-readable
+        print sizes in human readable format (e.g., 1K 234M 2G)
+    -s, --summary
+        Do not run recursively on sub directories
+    du -sh FOLDER
+    ls -l will list file sizes, but  folders discluding files within them.
+
+    See also: exapnd
+
+
+fdisk
+    Partition table manipulator for Linux
+    -l
+        list drives and partitions for each.  Note: will return empty in
+        Ubuntu unless run as sudo.
+    E.g, partition drive (FAT32 default?)
+        fdisk /dev/sda
+    See also: mkdosfs
+
+
+mkdosfs [INCOMPLETE]
+    E.g., Format drive at /dev/sdb to FAT32; Note: must be unmounted first
+        mkdosfs -n 'Label' -F 32 -I /dev/sdb
+    See also: fdisk
+
+
+mount [option] <device> <dir>
+    Mounts <device> at location <dir>.  <dir> must be previously created for
+    mount to succeed.  With no arguments, mount will print all mounted devices.
+    
+    -a
+        mount all entries in /etc/fstab
+    -r
+        Mount file system read-only
+    -w  
+        Mount file system read/write
+    -t  
+        File system type, e.g.,
+        nfs  Network file system. Most types to not require this, but for a few
+        types an ad hoc code is required, these include nfs, nfs4, cifs, smbfs,
+        ncpfs, and vboxsf).  If auto is specified mount will guess by reading
+        the superblock
+    -o  
+        Specify mount options in a comma-separated list.  This can control
+        things like file permissions.  Common options:
+            umask - additional rules to apply to file access mode.  Setting
+                umask=0 will ensure read/write access.
+            uid, gid - Sets the owner and group "of the root of the filesystem",
+        default: uid=gid=0.
+    See also: umount
+
+
+ulimit
+    Modify shell resource limits
+
+
+umount <dir>
+    unmount a previously mounted directory
+    See also: mount
+
+
+#### Processes
+
+htop
+    interactive process viewer
+    -u, --user=USERNAME
+        Show only the processes of a given user
+    Interactive features:
+        F9 - kill a process
+        F7/F8 - renice a process
+        l - list open files
+        u - display processes for one user
+
+kill [option] <pid> ...
+    Send the specified signal to process pid.  The default signal is TERM.  The
+    TERM signal, among others, will kill processes which do not catch this signal.
+    
+    The only signal which cannot be trapped is SIGKILL or signal 9.  It may be used
+    to kill zombie processes.  E.g.,
+        kill -9 <pid>
+        kill -SIGKILL <pid>
+    -l
+        list all signals
+    See also: killall, ps, trap, Signal section
+
+
+killall [options] name ...
+    Kill processes by name
+    See also: killall, ps
+
+
+pkill
+    Look up or signal processes based on name and other attributes
+    [INCOMPLETE]
+
+
+ps [options]
+    View running processes.  Each running process has a process ID, or pid.
+    Note ps has duplicate arguments depending on whether '-' is used.  Sometimes
+    their behaviour is identical, other times it is not.
+    
+    -A, -e
+        Select all processes
+    -a
+        select all processes except session leaders and processes not associated
+         with a terminal.
+    -a
+        List the "only yourself" restriction
+    -x
+        List the "must have a tty" restriction
+    -f
+        Full-format listing.  Can be combined with other options to add additional
+        columns.
+    -U, --user <userlist>
+        Select processes running under the user ID or name
+    -p, --pid <pidlist>
+        Select by PIC
+    <n>, -<n>, -p, p, -pid <n>
+        Select by PID n.
+
+    E.g.,
+    All processes currently running under the logged in user
+        pa -ux
+    All processes running under all users:
+        ps -aux
+    View every process running as root:
+        ps -U root -u root u 
+    See also: kill
+
+
+renice [-n] <priority> [[-p] pid ...] [[-g] pgrp ...] [[-u] user ...]
+    Alter priority of running processes.  The scheduling priorities go from -20 to
+    20.  0 is the base (default) priority, at 20 the process will only run when
+    nothing else is, and anything negative will run at a higher than usual priority.
+    -n, --priority
+        The scheduling priority of the process, process group, or user.
+    -g, --pgrp
+        Force who parameters to be interpreted as process group IDâs.
+    -u, --user
+        Force the who parameters to be interpreted as user names.
+    -p, --pid
+        Resets the who interpretation to be (the default) process ID's.
+
+
+time [options] command [arguments...]
+    Time the specified program command with the given arguments.   When command
+    finishes, time writes a message to standard error giving timing statistics
+    about this program run.
+    -f, --format=<format>
+        Specify output format.  See man page for format string.
+
+
+timeout [option] number[suffix] command [arg]...
+    Run a command with a time limit.  Start  command,  and kill it if still
+    running after number seconds.  suffix may be "s" for seconds (the
+    default), "m" for minutes, "h" for hours or "d" for days.
+
+top
+    Display tasks and system resource usage information.
+    htop is like top but provides more features.
+    Interactive Commands
+        <space>, <enter>
+            Refresh display
+        ?, h
+            Help
+        <, >
+            Move the sorted column left and right
+        R
+            Toggle normal/reverse sort
+        H
+            Toggle show threads
+        k
+            kill task
+        r
+            renice
+
+    See also: htop, free, vmstat
+
+vmstat
+    Report information about processes, memory, paging, block IO, traps, and cpu
+    activity.
+    Information obtained by memory utilities from /proc/meminfo.
+    See also: free, top
+
+wait [n ...]
+    Wait for each process and return its termination status.  Each
+    n may be a PID or a job specification.
+
+
+Users and Groups
+----------------
+
+groupadd [INCOMPLETE]
+    See also: useradd, groups, chgrp, newgrp
+
+
+groups [username]
+    Print the groups a user is in.  Running with no username prints all groups.
+    See also: useradd, groupadd, chgrp, newgrp
+
+
+id [option] [username]
+    print real and effective user and group IDs
+    -a
+        Ignore, for compatibility with other versions
+
+
+last [option] [username]
+    show listing of last logged in users.  This information is stored in
+    /var/log/wtmp.
+
+
+lastb [option] [username] - show listing of bad login attempts
+    This information is stored in /var/log/btmp
+
+
+newgrp [group]
+    Log in to a new group
+    See also: useradd, groupadd, chgrp, groups
+
+
+passwd [option] [username]
+    update user's authentication tokens.  If username is not supplied the password
+    change is done on the current user.
+    -l
+        Lock the user account
+
+
+su [options] [username]
+    Change user ID.  If run with no commands will become superuser, or root.
+    E.g., become root user
+        su root
+    Note: the command "sudo su" will also work
+
+
+sudo [command]
+    Runs a command requiring root priviledges
+    -v
+        Extend user timestamp to 15 minutes
+    E.g., become root user
+        sudo su
+    See also: su
+
+
+useradd [options] <username>
+    Add a user to a group
+    -D, --defaults
+        display or change default options.  See man page for options.
+        The default values for useradd are in /etc/default/useradd.
+    -p, --password <password>
+        Set the password, by default the password is disabled.
+        Note: this is not recommended since the password will be visible by listing
+        the processes.  Use passwd instead.
+    -U, --user-group
+        Create a group with the same name as the user, and add
+        the user to this group.
+    -G <groupname>
+        add user to group groupname
+    E.g.,
+    Create new user with default values
+        useradd <username>
+    View default options
+        useradd -D
+    Set korn shell as default shell
+        useradd -D -s /bin/ksh
+    Create new user that will use the korn shell by default
+        useradd 
+    See also: userdel, groups, passwd, id
+
+
+userdel [options] <username>
+    Remove a user account.
+    -r
+        Remove the user's home directory
+    The default behaviour for userdel is defined in:
+        Red Hat distos: /etc/login.defs
+        Debian/Ubuntu:  /etc/deluser.conf
+    See also: useradd, usermod, groups, passwd, id
+
+
+usermod [INCOMPLETE]
+    -a
+    -G
+    E.g., add user to a group
+    usermod -a -G <groupName> <username>
+
+
+Bash Builtins
+-------------
+
+http://tldp.org/LDP/abs/html/internal.html
+
+A builtin is a command contained within the Bash tool set, literally built in.
+This is either for performance reasons -- builtins execute faster than external
+commands, which usually require forking off [1] a separate process -- or because
+a particular builtin needs direct access to the shell internals.
+
+
+break [n]
+    Exit from within a for, while, until, or select loop.  If n is specified,
+    break n levels.
+
+
+continue [n]
+    Resume  the  next  iteration of the enclosing for, while, until, or select
+    loop.  If n is specified, resume at the nth enclosing loop.
+
+
+declare [option] [name[=value]]
+    Declare variables and/or give them attributes.  If no names are given then
+    display the values of variables.
+    -a
+        declare an array, e.g. declare -a arr=("element1" "element2" "element3"
+    -i
+        declare an integer
+    -p
+        print defined variables
+
+
+exit [n]
+    Exit with the status n.  If n is not provided the exit code is that of the
+    last command executed.
+    Note: 0 indicated no error, non-zero an error.
+
+
+export [-fn] [name[=word]] ...
+    The supplied names are marked for automatic export to  the  environment  of  subsequently
+    executed commands.
+
+
+getopts optstring varname [args...]
+    Parse positional parameters.
+    getopts parses single dash single character arguments like "-a".  If args is
+    not supplied $@ is parsed.
+    [INCOMPLETE]
+
+
+local: local [option] name[=value] ...
+    Define local variables
+
+
+read
+    Read from stdin or a file descriptor if provided.
+    -u <fd>
+        Read from file descriptor fd
+
+
+readarray [array]
+    Read lines from  the standard input into the indexed array variable <array>.
+    The variable MAPFILE is the  default array.
+
+
+return [n]
+    Causes a function to exit with the return value specified by n.  If n is
+    omitted, the return status is that of the last command executed in the
+    function body.  If used outside of a function, the shell exists.
+
+
+seq
+    Print a sequence of numbers
+    seq [OPTION]... LAST
+        Print the numbers 1 to LAST inclusive
+    seq [OPTION]... FIRST LAST
+        Print the numbers FIRST to LAST inclusive
+    seq [OPTION]... FIRST INCREMENT LAST
+        Print the numbers FIRST to last incrementing by INCREMENT
+
+shift [n]
+    The positional parameters from n+1 ... are renamed to $1 ....  Parameters
+    represented by the numbers $# down to $#-n+1 are unset.
+    - n must be a non-negative number less than or equal to $#.
+    - If n is 0, no parameters are changed.
+    - If n is not given, it is assumed to be 1.
+    - If n is greater than $#, the positional parameters are not changed.
+
+
+test expression
+    Exit with the status determined by expression.  expression may be a boolean
+    expression, a command (what else?).  test is the command called in an if
+    statement when [] is used.
+
+
+trap [[arg] signal ...]
+    Trap signals and other events.  Trap is executed before execution resumes
+    after the function or script.
+    Common signals are:
+        SIGHUP
+        SIGINT
+        SIGTERM 
+    -l
+        List all possible signals
+    See also: kill, killall
+
+
+
+Shell Setup
+===========
+
+hacktux.com/bash/bashrc/bash_profile
+
+- ~/.bash_profile and ~/.bashrc are scripts executed when bash is invoked.  
+  These may contain configuration commands setup by the user.
+- .bash_profile is invoked with a login shell, .bashrc with an interactive shell 
+  that is not a login shell.  Typically .bash_profile runs .bashrc.
+- Examples may include setting environment variables, aliases, shell configurations
+  like colour, prompt.
+
+
+Environment Variables
+---------------------
+
+- Running env or printenv displays a list of environment variables currently
+  defined in the running shell.  Linux defines many by default, most of which
+  may be modified.
+- Display an environment variable's value by running "echo $VAR_NAME"
+- Set an environment variable by entering VAR_NAME=value
+    - Spaces allowed?
+    - This will only last until the shell is closed
+    - To make a lasting change use export VAR_NAME, this will save the change
+      and be visible the next time a shell is open as well to other programs.
+- Useful environment variables:
+    HOME        the path of the home directory for the current user
+    HOSTNAME    the host name of this machine
+    OS, OSTYPE  the type of Operating System (Linux, Unix, etc)
+    PATH        a colon-seperated list of paths to search for commands in
+    PIPESTATUS  an array of integers storing the exit status of each command in
+                a pipe command
+    PPID        PID of parent process
+    PS1         the bash custom prompt, common configurations are:
+                \s-\v\$       sh-3.2$           The default, shell name and version
+                [\w]>         [~/some/path]>    The path of the working directory
+                [\W]>         [currentDir]>     The working directory
+                [\u@\h \W]\$  [user@host currentDir]#
+    PS2 [INCOMPLETE] http://www.thegeekstuff.com/2008/09/bash-shell-take-control-of-ps1-ps2-ps3-ps4-and-prompt_command/
+    PS3
+    PS4
+    RANDOM      An internal bash function that returns a differentpseudo-random
+                integer in the range 0 - 32767
+    SHELL       the type of shell currently running (sh, csh, bash, korn, etc)
+    TERM        the type of terminal window currently running (xterm, cygwin, etc)
+    USER        the name of the current user account
+
+
+File Globbing 
+-------------
+
+- Also referred to as shell patterns
+- Similar concept to regular expressions but the syntax is much simpler and
+  verbosity much lower
+
+The * wildcard matches zero or more of any character, e.g.:
+    ./*         all files in the current directory
+    *.txt       all files in the current directory ending in .txt
+The ? wildcard matches a single character, e.g.:
+    ?.txt       file names with one character and ending in .txt
+[] specify a range or characters
+    log[1-9].txt    files starting with log followed by a number, ending in .txt
+    wget[123].log   files starting with wget followed by 1, 2, or 3, ending in .log
+{a,b,c}
+
+
+IO Redirection
+--------------
+
+Note: do not redirect output to a file being read from at the same time.
+
+Redirect stdout to a file
+    command > filename
+    
+Redirect stdout to a file
+    file > command
+    file 1> command
+    
+Append stdout to a file
+    command >> filename
+    command 1>> filename
+    
+Redirect stderr to a file
+    command 2> filename
+    
+Append stderr to a file
+    command 2>> filename
+
+Write to stderr
+    echo "text" >&2
+    
+Pipe output of a command to input of another
+    command1 | command2
+
+Redirect stdout and stderr through the same stream
+    command &> filename
+- This can then be sent to a file or piped
+    command > filename 2>&1
+
+Discard output using the special /dev/null device
+    command 2> /dev/null
+
+
+Hotkeys
+-------
+
+Ctrl-A  brings you to the beginning of the line
+Ctrl-B  backspace (nondestructive)
+Ctrl-C  kills the running task
+Ctrl-D  generates the EOF character.  Usually kills a task if its waiting for
+          input, if nothing is running acts as exit and logs out.
+Ctrl-E  brings you to the end of the line
+Ctrl-K  deletes everything after the corsor
+Ctrl-
+Ctrl-W  deletes the word immediately before the corsor
+Ctrl-Y  will undo the previous deletion
+Ctrl-Z  Pauses a foreground job and sends the it into the background
+            INCOMPLETE: how to access
+
+
+
+ Bash Shell Scripting 
+=====================
+
+Genereal
+--------
+
+- Start each line with #!/bin/bash to execute
+- A batch file must have executable permissions, chmod u+x bash_file.sh
+- When editing a bash script in Windows you may have to convert the newline to
+  unix, use dos2unix command.
+
+- When a script is run it is executed in a sub-shell, because of the first 
+  line, this means variables defined directly in the script won't be seen
+- A script will not return if a command fails; it will execute to the end or an
+  exit command
+- In general, external commands in a script fork a subprocess, whereas Bash
+  builtins do not.
+
+- In many cases spaces are significant, pay close attention to them!
+- A side-effect of this is commands like cd; they do not affect the calling shell.
+  To execute a script in the current shell, begin with '. ', e.g. '. hello.sh'
+- To execute a command if the previous one passes, and halt the script if it fails,
+  append ' && \' to the end of the previous command.  Note this is dependent on
+  the script exiting with success and failure codes (0 for success, 1 for failure)
+
+
+Special Variables
+-----------------
+
+  $0, $1,
+  $2, etc.  Positional parameters, passed from command line to script, or passed
+            to a function.  To access parameter 10 or greater it must be enclosed
+            in {}, ${10} otherwise it will be interpreted as $1 followed by a 0.
+  $#        Number of command-line arguments or positional parameters
+  $*        All of the positional parameters in an array, unquoted
+  $@        Same as $* but parameters are quoted
+  $-        Flags passed to script; Note originally a ksh feature ported to bash,
+            doesn't work well.
+  $!        PID of last job run in background
+  $?        Exit status of a command, function, or the script itself
+  $_        Final argument of previous command executed
+  $$        PID of the script itself.  $$ is useful for constructing unique
+            temp file names.
+
+
+Special characters
+------------------
+- See also: Folder special characters
+- http://tldp.org/LDP/abs/html/special-chars.html
+
+  #     Comment
+  ;     End a command, just like a newline but used to have multiple commands
+        on one line
+  -     option prefix, e.g., ls -l
+  =     Equals assignment operator
+  + -   Plus/minus arithmetic operators
+  %     Modulo arithmetic operator
+  \X    Ecsape sequence, has the same effect as "X"
+  \     Continue command onto next line.  Useful when writing commands in file
+        and copy-pasting into shell
+  ""    Preserves most special characters in a string (see below)
+  ''    Preserves all special characters in a strong (see below)
+  :     Null command, the shell equivalent of a do-nothing operation
+  !     Negation
+  *     Wildcard, matches any number of characters
+  ?     Wildcard for filename expansion in globbing, matches any single character
+  $     Variable substitution, placed in front of a variable name to indicate the
+        value the variable holds
+  ()    Commands placed within are run in a subshell.  It is a child process,
+        variables are not visible to the rest of the script.
+  {x,y,z}   Brace expansion.   executes surrounding command once for each argument.
+  {x..z}    Extended brace expansion, same as above but with the specified range. 
+  {}    Placeholder for output text
+  (())  Integer expansion.  Allows for C-style integer operations.
+  > &> >& >> < <>   Redirections
+  |     Pipe, a | b, sends output of a to b
+  &     Run job in background. A command followed by an & will run in the background.
+  ||    OR logical operator, note in bash 0 represents success (because of the 0 exit status?)
+  &&    AND logical operator
+  `     INCOMPLETE
+
+Character escaping [INCOMPLETE]
+http://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html
+
+    Double quotes: ' * &
+    Single quotes: " `
+
+Reserved Words
+    ! { } case do done elif else exac fi for if in then until while
+
+
+
+Arithmetic & Comparism
+======================
+
+tldp.org/LDP/abs/html/comparison-ops.html
+
+- If conditions are commands themselves.  If a command is used as an if condition
+  Its return value is checked.  For this reason shell scripts, C programs, etc
+  should be written with proper return values.
+- That is the reason for the 'then' keyword.  If the exist status of the if command
+  if true, the 'then' command is executed.
+- Spaces are significant here!  They are required between brackets, operators, etc.
+- Operators are overloaded.  Surrounding with double brackets will give some
+  new meaning.
+- The behaviour of comparisons is complicated, it differs based on brackets,
+  quotations, etc.  See link above as well: http://serverfault.com/questions/52034/what-is-the-difference-between-double-and-single-square-brackets-in-bash/52050#52050
+
+Brackets explained
+- [] are bash builtins, while [[]] are bash keywords.  This means the contents of
+  each are parsed differently.  Keywords are like builtins but have some special
+  parsing rules.  E.g., escaping comparism operators:
+    [ a \< b ]
+    [[ a < b ]]
+- [[]] is not sh-compatible.
+- [ invokes the test command, a bash builtin.  This means the following are
+  equivalent:
+    if test $# -lt 3; then ...
+    if [ #$ -lt 3 ]; then ...
+- With [] it is good practice to place variables in double quotes to prevent
+  word splitting with variables that expand to strings containing spaces
+- In general, if compatibility with sh is a concern [] should be used.  Otherwise
+  [[]] should be used for its richer functionality, e.g., string matching with
+  wildcards.
+
+- (()) allows for C-style arithmetic and integer comparism only.  It is better for
+  compound expressions.
+
+
+if statement
+------------
+if:
+    if <condition>
+    then
+        <do something>
+    fi
+
+else if:
+    if <condition>
+    then
+        <do something>
+    elif
+        <do something else>
+    fi
+
+else:
+    if <condition>
+    then
+        <do something>
+    elif
+        <do something else>
+    else
+        <do something else>
+    fi
+
+if one liner, same syntax works with loops:
+    if <condition>; then <do something>; fi
+
+if with empty body:
+    if <condition>
+    then
+        :
+    fi
+
+
+Integer
+-------
+- May be tested in a variety of ways:
+    if test $a -eq 1; then [...]
+    if [ $a -ne 0 ]; then [...]
+    if [[ $a -gt 0 ]]; then [...]
+    if (($a <= 5)); then [...]
+
+    -eq     equal to        if [ "$a" -eq "$b" ]
+    -ne     not equal to    ...
+    -gt     greater than
+    -ge     greater than or equal to
+    -lt     less than
+    -le     less than or equal to
+
+C-style comparism operators may be used within double parentheses 
+    (( a = 5))           Note the spaces padding =
+    (( t = a<45?7:11 ))  trinary operation
+
+String
+------
+    =, ==   Equal to
+    !=      Not equal to
+    <       Less than
+    >       Greater than
+    -z      String is null, that is, it has zero length
+                if [ -z "$a" ]
+                Note: good practice to encluse the variable in ""
+                Note: works on all datatypes
+    -n      String is not null
+
+
+Arrays
+------
+http://www.tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html
+- Arrays are declared using the declare command:
+    declare -a someArray
+    someArray=(value 1 value2 ... valueN)
+  or:
+    declare -a 
+- Arrays may be updated using the syntax:
+    someArray[1]=value
+- Array indexing is zero-based
+
+
+File
+----
+http://tldp.org/LDP/abs/html/fto.html
+Note: each test includes an implicit test if it exists
+    -a    file exists
+    -e    file exists
+    -d    file is a directory
+    -f    file is a regular file
+    -h    file is a symbolic link
+    -L    file is a symbolic link
+    -s    file is not zero size
+    -r    file has read permission (for the user running the test)
+    -w    file has write permission (for the user running the test)
+    -x    file has execute permission (for the user running the test)
+
+
+Boolean
+-------
+    -o  or
+    -a  and
+- Unlike in C and Java, the second part of compound if statement may be partially
+  executed because bash makes multiple passes over the statement to do things like
+  parameter substitution.  E.g.,
+    if [ -z "$V1" -o -z "${V2:=YIKES}" ]
+  To avoid this side effect break the statement into nested if statements.
+    ||  or
+    &&  and
+
+
+Arithmetic
+----------
+- Can run using the let command or in double parentheses:
+let a += 1
+((a+=1))
+    Operator  Meaning                   Use         Meaning
+    =         Simple assignment         a=b         a=b
+    +=        Addition                  a+=b        a=a+b
+    -=        Subtraction       
+    *=        Multiplication
+    /=        Division
+    %=        Modulo (remainder)        a%=b        a=a%b
+    <<=       Bit-shift left            a<<=b       a=(a<<b)
+    >>=       Bit-shift right
+    &=        Bitwise "and"
+    ^=        Bitwise "exclusive or"
+    |=        Bitwise "or"
+Again, by enclosing in double parentheses, C-style operators may be used
+    (( b++ ))   pre/post increment/decrement
+
+
+
+Signals
+=======
+
+[Wiki URL]
+General
+- A signal is an asynchronous notification sent to a process or to a specific
+  thread within the same process
+- Signals interrupt the process's normal flow of execution
+- Signals may be used in embedded systems as a form of inter process communication
+  because of their low CPU and memory overhead
+
+Sending
+- Signals may be sent by the operating system upon an illegal operation, or
+  from the terminal with certain key combinations
+
+Handling
+- If a process has a registered signal handler, that routine is executed to
+  perform things like end of program cleanup.  Otherwise, the default signal
+  handler is executed
+- A process may also specify to ignore a signal
+- There are two signals which cannot be intercepted and handled: SIGKILL and SIGSTOP
+
+
+Signal   Value  Default Handler         Note/cause
+------   -----  ---------------         ----------
+SIGHUP   1      terminate               controlling terminal/process exits
+SIGINT   2      terminate               keyboard inturrupt (ctl-c)
+SIGQUIT  3      core dump + terminate   keyboard quit (ctl-/)
+SIGILL   4      core dump + terminate   illegal instruction executed
+SIGABRT  6      core dump + terminate   abort signal sent by abort(3) call
+SIGFPE   8      core dump + terminate   floating point exception (division by zero)
+SIGKILL  9      terminate               kill signal (kill -9 PID)
+SIGSEGV  11     core dump + terminate   invalid memory reference (segmentation fault)
+SIGPIPE  13     terminate               broken pipe (process writes to pipe closed
+                                        by reader)
+SIGALRM  14     terminate               timer signal sent by alarm(2) call
+SIGTERM  15     terminate               termination signal
+SIGUSR1  10     terminate               user-defined signal 1
+SIGUSR2  12     terminate               user-defined signal 2
+SIGCHLD  17     ignore                  child process stopped or exited/terminated
+SIGCONT  18     N/A                     continue, if stopped
+SIGSTOP  19     stop                    stop (suspend execution of) process
+SIGTSTP  20     stop                    stop process (ctrl-z)
+SIGTTIN  21     stop                    tty input for background process
+SIGTTOU  22     stop                    tty output for background process
+

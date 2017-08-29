@@ -1,0 +1,3 @@
+cat document.txt | pbcopy
+pbpaste > document.txt
+

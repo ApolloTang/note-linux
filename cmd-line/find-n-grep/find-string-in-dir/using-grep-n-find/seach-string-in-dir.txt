@@ -1,0 +1,57 @@
+http://www.pc-freak.net/blog/find-recursive-grep-subdirectories-unix/
+
+GNU Grep is equipped with a special option "-r" to grep recursively.
+To look for string in a file in a sub-directories tree:
+
+    $ grep -r 'string' /directory/
+
+non-case sensitive for text
+
+    $ grep -ri 'string' .
+
+just list name for the file:
+
+    $ grep -rli 'string' directory-name
+
+
+On some other UNIX like HP-UX or Sun OS / Solaris where there
+is no GNU grep installed:
+
+    $ find /directory -exec grep 'string' {} dev/null \;
+
+The above approach to look for files containing string on UNIX
+is very slow. Thus on not too archaic UNIX systems for some better
+search performance it is better to use "xargs":
+
+    $ find . | xargs grep searched-string
+
+
+With "xargs" there might be weird results when run on filesystems
+with filenames starting with "-". Thus comes the classical (ultimate
+way to grep for files containing string with find + grep,
+
+    $find / -exec grep grepped-string {} dev/null \;
+
+Another way to search a string recursively in files is by using
+UNIX OS '*' (star) expression:
+
+    $grep pattern * */* */*/* 2>/dev/null
+
+Talking about recursive directory text search in UNIX, should
+mention  another good GNU GREP alternative ACK – check it on
+betterthangrep.com :) . Ack is perfect for programmers who have
+to dig through large directory trees of code for certain variables
+ functions, objects etc.
+
+
+
+-----------------------------
+http://stackoverflow.com/questions/15622328/how-to-grep-a-string-in-a-directory-and-all-its-subdirectories-files-in-linux
+
+If your grep supports -R, do:
+
+    $ grep -R 'string' dir/
+
+If not, then use find:
+
+    $ find dir/ -type f -exec grep -H 'string' {} +

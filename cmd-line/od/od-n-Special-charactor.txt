@@ -1,0 +1,65 @@
+^M or \r\n
+
+Control-M (^M) is carriage return without linefeed.
+it can be produced by 
+echo “Hello <ctrl + v> <ctrl +m> World” > myfile.txt
+
+see: http://www.thelinuxtips.com/tag/od-command/
+
+
+The End of Line character in Unix/Linux is \n. 
+Windows End of Line Character is \r\n or (^M)
+
+use: od -Ad -c myfile.txt
+this will display offset in decimal (-Ad) and content in ASCII (-c)
+
+
+
+
+
+
+
+_______
+From: http://blogs.vijaychinnasamy.com/?p=16
+
+		$ ./myscript.sh
+		ksh: ./myscript.sh: No such file or directory
+		$ head -1 myscript.sh
+		#!/bin/sh
+		$ which sh
+		/bin/sh
+
+	I immediately thought there is an issue interpreting the first line. “od” (Octal Dump) command came to my rescue. You can see here:
+
+		$ od -ac myscript.sh |head
+		+ od -ac myscript.sh
+		+ head
+		0000000 # ! / b i n / s h cr nl cr nl # sp T
+		# ! / b i n / s h \r \n \r \n # T
+		0000020 h i s sp u t i l i t y sp a s k sp
+		h i s u t i l i t y a s k
+		0000040 f o r sp u s e r n a m e , sp p a
+		f o r u s e r n a m e , p a
+		0000060 s s w o r d , sp a n d sp n u m b
+		s s w o r d , a n d n u m b
+		0000100 e r sp o f sp t h r e a d s cr nl #
+		e r o f t h r e a d s \r \n #
+		$
+
+	As you can see above (the characters \r\n), there are ^M (Control + M) characters after the /bin/sh, So obviously the shell is unable to read that as the shell interpreter. This is a common problem when we move scripts from Windows machines to Linux/Unix machines.
+
+	The End of Line character is Unix/Linux is \n. If there are two characters, such as \r\n, then it is the Windows End of Line Character.
+
+	There are many solutions to fix this problem:
+
+		1. In vi edition, you can search for ^M characters and delete them
+
+			:%s/^M//g
+
+			To get the ^M in vi edition, you need to press Ctrl+V and Ctrl+M.
+	
+		2. In Linux, there is an option called “:set fileformat=unix” – Set this mode and save the file.
+
+		3. During the file transfer from Windows, set the mode as ASCII. 
+			Most of the FTP clients do this automatically for extensions .sh .txt etc. If not, you need to do that.
+

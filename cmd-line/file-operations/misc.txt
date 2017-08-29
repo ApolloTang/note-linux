@@ -1,0 +1,19 @@
+
+$mkdir -p ./a/a/a/a/
+$tree a
+a
+`-- a
+    `-- a
+        `-- a
+
+
+		
+$ mkdir -p playground/dir-{00{1..9},0{10..20},100}
+$ cd playground/
+$ ls
+dir-001  dir-004  dir-007  dir-010  dir-013  dir-016  dir-019
+dir-002  dir-005  dir-008  dir-011  dir-014  dir-017  dir-020
+dir-003  dir-006  dir-009  dir-012  dir-015  dir-018  dir-100
+$cd ..
+$touch playground/dir-{00{1..9},0{10..20},100}/file-{A..Z}
+$tree > directory-tree

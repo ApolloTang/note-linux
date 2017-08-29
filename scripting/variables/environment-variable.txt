@@ -1,0 +1,9 @@
+
+
+$ export NAME=value
+
+$ unset NAME
+
+
+$env               ## list all of your environment variables
+$printenv          ## (note available in git-bashr) list all of your environment variables
