@@ -29,6 +29,19 @@ Get last elements:
     d
 
 
+Operation
+
+eg:
+
+    $ a=(a b c d e)
+    $ last=${#a[@]}
+    $ lastIndex=$(($last-1))
+    $ lastElement=${a[lastIndex]}
+    $ echo $lastElement
+    e
+
+
+
 
 
 

@@ -1,0 +1,5 @@
+
+arithmetic expression: $((expression))
+
+e=$((5 * 7))       # Arithmetic expansion.
+

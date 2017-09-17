@@ -1,0 +1,59 @@
+~~~~~~~~
+Here doc
+~~~~~~~~
+
+  Here document (or here script) is I/O redirection in
+  which a body of text is embeded into script and feed it
+  into the standard input of a command :
+
+      command << token
+      text
+      token
+
+  For example:
+
+      $ cat << _mytext_
+      > here is some text
+      >    text with leading space
+      > _mytext_
+      here is some text
+         text with leading space
+
+  here docuement is similar to echo, but the advantage is that single
+  and double quotes within here documents lose their  meaning to the
+  shell:
+
+      foo="mytext"
+      $ echo $foo "$foo" '$foo' \$foo
+      mytext mytext $foo $foo
+
+      $ cat << _EOF_
+      > $foo "$foo" '$foo' \$foo
+      > _EOF_
+      mytext "mytext" 'mytext' $foo
+
+
+  [!] Note that the closing token must be fully left-justified,
+  ie. no leading white-space, and no trailing space either.
+  Also, you could/should (depending on your needs) write the
+  first one as <<'token' .. the quotes disable some shell
+  expansion which can otherwise occur.  [ref 1]
+
+  However, If you change the redirection operator from << to <<-,
+  the shell will ignore leading tab characters in the here document.
+  This allows a here document to be indented to improve readability.
+  And with '<<-' you leading tab characters is allow before closing
+  token.
+
+  someCommand <<- _EOF_
+                    open $FTP_SERVER
+                    user anonymous me@linuxbox
+                    cd $FTP_PATH
+                    hash
+                    get $REMOTE_FILE
+                    bye
+                  _EOF_
+
+  [ref 1] http://unix.stackexchange.com/questions/38757/unexpected-end-of-file-in-bash-script
+
+

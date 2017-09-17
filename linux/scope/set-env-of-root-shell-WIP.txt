@@ -1,0 +1,17 @@
+
+# Unique variable --------------------------------------------------------
+
+# \\ reset server port counter
+# echo 8100 > ~/._env/port_counter_01
+# comment out the above because it run everytime I spawn xterm
+# (I thought .bash_profile only run once on login)
+
+# \\ following does not work
+# export port_counter_01=8100
+# function increase_port_counter_01 {
+#     ((port_counter_01=port_counter_01+1))
+#     # http://stackoverflow.com/questions/496702/can-a-shell-script-set-environment-variables-of-the-calling-shell
+# }
+# export -f increase_port_counter_01
+# # http://unix.stackexchange.com/questions/106601/how-to-add-a-function-to-bash-profile-profile-bashrc-in-shell
+
