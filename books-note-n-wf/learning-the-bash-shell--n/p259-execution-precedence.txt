@@ -1,0 +1,22 @@
+When they have the same name here are the
+execution precedence:
+
+  1. Aliases
+  2. Keywords
+  3. Functions
+  4. Build-in
+  5. Script and executable in path
+
+If you want to find out which type of executable
+a comand is, use 'type'
+
+  type some_name
+
+To list all type that have been defined for a executable
+
+  type -a some_name
+
+
+
+
+

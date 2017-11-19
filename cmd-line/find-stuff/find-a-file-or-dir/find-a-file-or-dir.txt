@@ -1,0 +1,6 @@
+
+If it is a repo you can use git
+
+  git ls-files '*/filename.ext'
+
+Ref: https://stackoverflow.com/questions/277546/can-i-use-git-to-search-for-matching-filenames-in-a-repository

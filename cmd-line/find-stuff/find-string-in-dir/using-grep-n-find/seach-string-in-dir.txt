@@ -1,3 +1,13 @@
+
+
+Your can also use git:
+
+  git grep some-string -- '*/HelloWorld.pm'
+
+ref: https://stackoverflow.com/questions/277546/can-i-use-git-to-search-for-matching-filenames-in-a-repository
+---------------------------
+
+
 http://www.pc-freak.net/blog/find-recursive-grep-subdirectories-unix/
 
 GNU Grep is equipped with a special option "-r" to grep recursively.
