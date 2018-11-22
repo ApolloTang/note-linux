@@ -1,0 +1,8 @@
+function_name () {
+return
+}
+
+
+
+Shell-function names follow the same rules as variables. 
+A function must contain at least one command

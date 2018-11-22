@@ -1,0 +1,5 @@
+https://unix.stackexchange.com/questions/193465/what-file-mode-is-a-symlink
+https://www.pluralsight.com/blog/it-ops/linux-file-permissions
+
+
+https://unix.stackexchange.com/questions/183994/understanding-unix-permissions-and-file-types

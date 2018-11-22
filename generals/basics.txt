@@ -1,0 +1,38 @@
+
+Bash
+====
+
+  exit status
+  -----------
+
+  echo $?  # show the exit status of previous command
+  0        # exit status of zero mean command executed successfully
+
+  Meaning of special characters
+  -----------------------------
+  #   comment
+  ;   command separator
+  ;;  terminator for case option
+  .   equivalent to the 'source' command
+  "   partial quoting
+  '   full quoting
+  ,   arithmetic operation separator:
+        all operation are evaluated, but only the result of last operation is returned
+  \   back slash, escape:
+        eg: escape a char is same as full quoating a char: \x = 'x'
+  /   forward slash: filename path separator
+  `   Backticks, backquotes, command substitution:
+        use the result of a command in another command
+  :   null command, NOP in shell, do nothing operation
+        synonym with boolen true
+
+  more on null command
+  --------------------
+  $ : > filename.ext   # truncates a file to zero length, w/o changing its permissions
+                       # same as: $ cat /dev/null > filename.ext
+  $ : >> filename.ext  # this is equivalent to: $ touch filename.ext
+
+
+
+
+

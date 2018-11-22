@@ -1,0 +1,15 @@
+
+To escape the single quote, close the quoting before it, insert
+the single quote, and re-open the quoting.
+
+  $ echo I'm
+  > ^C
+
+  $ echo 'I'\''m'
+  I'm
+
+  $ echo \'
+  '
+
+https://stackoverflow.com/questions/15783701/which-characters-need-to-be-escaped-in-bash-how-do-we-know-it
+
