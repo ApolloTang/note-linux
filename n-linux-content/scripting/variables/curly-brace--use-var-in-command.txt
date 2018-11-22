@@ -1,0 +1,16 @@
+
+::::: The use of ${}
+
+
+$ myVAR=value_of_myVAR
+$ yourVAR=value_of_yourVAR
+
+$ whose=my
+$ echo ${whose}VAR
+myVAR
+
+$ whose=your
+$ echo ${whose}VAR
+yourVAR
+
+Ref: powerTool-35.3

@@ -1,8 +1,0 @@
-$ cat > filename.txt
-some test in line 01
-some text in line 02
-some text in line 03
-some text in line 04
-^D
-
-

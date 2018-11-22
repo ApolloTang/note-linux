@@ -1,4 +1,0 @@
-
-show disk space:
-	df -h
-	

@@ -1,0 +1,42 @@
+
+Export made variable available to other programs, while
+Regular (non-exported) variables are not available to other programs.
+
+in other word:
+
+It marks the variable as "exportable" so that it will show up
+in the environment for any child processes you run.
+
+  $ var_x=x;
+  $ echo $var_x;
+  x
+
+  $ env | grep '^var'
+  <nothing got print in console>
+
+  $ export var_x=x;
+  $ env | grep '^var'
+  var_x=x
+
+
+Note that non-exported variables will be available
+to sub-processes run via ( ... ) and similar notations:
+
+  $ var_a=a
+  $ echo $var_a
+  a
+
+  $ (echo $var_a)
+  a
+
+  $ (var_a=b; echo $var_a)
+  b
+
+  $ echo $var_a
+  a
+
+  The sub-process cannot affect the variable in the
+  parent shell, of course.
+
+
+after: http://stackoverflow.com/questions/7411455/what-does-export-do-in-shell-programming

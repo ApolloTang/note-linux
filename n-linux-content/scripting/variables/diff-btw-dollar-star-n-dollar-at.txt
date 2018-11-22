@@ -1,0 +1,29 @@
+
+
+"$@" expands to properly quoted arguments and "$*" makes all arguments into a single argument. Take this for example:
+
+    #!/bin/bash
+
+    function print_args_at {
+        printf "%s\n" "$@"
+    }
+
+    function print_args_star {
+        printf "%s\n" "$*"
+    }
+
+    print_args_at "one" "two three" "four"
+    print_args_star "one" "two three" "four"
+
+
+Then:
+
+    $ ./printf.sh 
+    one
+    two three
+    four
+    one two three four
+    
+ from:   
+ http://stackoverflow.com/questions/9915610/the-difference-between-and
+    

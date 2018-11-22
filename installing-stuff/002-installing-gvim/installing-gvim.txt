@@ -1,6 +1,0 @@
-http://askubuntu.com/questions/77503/how-to-install-gvim
-
-
-sudo apt-get install vim-gnome 
-
-

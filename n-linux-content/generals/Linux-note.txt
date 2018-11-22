@@ -1,0 +1,106 @@
+
+Moving cursor
+`````````````
+	
+		[ct] + a	move to beginning of the line
+		[ct] + e	move to end of the line
+
+		Using [f] and [b]
+		`````````````````
+		[ct] + f 	move forward
+		[ct] + b	move backward
+
+		[al] + f	move cursor before next word  
+		[al] + b 	move cursor to begining of word, and previous word  
+		
+		tips on pressing [al]: 
+			use L thumb to press [al]
+			tug R thumb on [space bar] before press [al] to prevent pressing [space bar] 
+			words operation is done with [al]
+
+Cut and paste
+``````````````
+	[ct] + k 	cut to end of line
+	[ct] + u	cut to begining of line
+
+	[al] + d				cut to end word
+	[al] + [backspace]  	cut to begining word, 
+							if cursor is at the beginning of a word, cut previous word
+	
+	[ct] + y 	paste 
+
+Other
+``````
+	[ct] + l 	clear terminal
+
+	[ct] + t 	transpose character
+	[al] + t	transpose current word with the preceding word 
+	
+	
+Be careful with these
+``````````````````````	
+	[ct] + d	exit, logout, quit  / delete a character
+	[ct] + c	kill current program
+	[ct] + z 	suspend a program
+
+
+try not to use these because you can not undo them
+``````````````````````````````````````````````````
+	[ct] + h 	[backspace]
+	[ct] + d	[del]  (becareful with this, if it is and 
+						empty line text this will close the shell)
+
+
+help
+~~~~~
+whatis {command}
+info {command}
+man {command}
+apropos {subject}
+
+
+using info
+~~~~~~~~~~
+hypertext help system
+
+	$info info	// tutorial on navigating the infor system
+
+	move to asterisk and hit [enter] to jump to the topic/subject
+	[n] 		next subject
+	[p] 		previous subject
+	[space bar]	move to next page
+	[backspace]	page backward
+	[q]			quit
+	[h] 		help
+	[TAB]		jump between hyperlinks
+	
+
+Misc
+````
+
+printenv USER //no '$'
+echo $USER	  //need '$'
+
+
+start up file
+`````````````
+:: login shell ::
+	/etc/profile
+	~/.bash_profile
+	~/.bash_login
+	~/.profile
+
+:: non login Shell ::
+	/etc/bash.bashrc
+	~/.bashrc
+
+	
+	
+	
+
+Less
+`````
+foward:                [f]
+backward:              [b]
+toggle fold long line: [-] , [shift] + [s] , [return]
+

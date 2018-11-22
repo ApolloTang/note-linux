@@ -1,9 +1,0 @@
-
-::::::::::::::::::::::::::
-Declare immutable constant
-::::::::::::::::::::::::::
-
-	declare -r TITLE="Page Title"
-
-the shell would prevent any subsequent assignment to TITLE. This feature is rarely
-used, but it exists for very formal scripts.

@@ -1,0 +1,6 @@
+http://vim.wikia.com/wiki/The_perfect_programming_font
+
+
+ apt-get install xfonts-jmk
+
+

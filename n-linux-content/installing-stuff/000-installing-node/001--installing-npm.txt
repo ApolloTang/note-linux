@@ -1,0 +1,6 @@
+
+    npm is already installed if you installed NOde.js from one of the 
+    installers at nodejs.org
+
+    [!]  For security reason do not install npm with sudo
+
